@@ -8,6 +8,9 @@
 
 #include "MapScene.h"
 
+#include "SneakyJoystickSkinnedBase.h"
+#include "SneakyJoystick.h"
+
 USING_NS_CC;
 
 CCScene* MapScene::scene()
@@ -25,7 +28,12 @@ bool MapScene::init()
         return false;
     }
     
+    // タップの有効化
+    this->setTouchEnabled(true);
+    this->setTouchMode(kCCTouchesOneByOne);
+    
     _viewPlayerCharacter();
+    _initVirtualPad();
     
     return true;
 }
@@ -52,4 +60,68 @@ void MapScene::_viewPlayerCharacter()
     CCSize winSize = CCDirector::sharedDirector()->getWinSize();
     sprite->setPosition(ccp(winSize.width/2, winSize.height/2 + 40));
     this->addChild(sprite);
+}
+
+void MapScene::_initVirtualPad()
+{
+    // Texture読み込みとエイジング無効化
+    CCTexture2D* background_tex = CCTextureCache::sharedTextureCache()->addImage("interfaces/vjoystick_background.png");
+    CCTexture2D* thumb_tex = CCTextureCache::sharedTextureCache()->addImage("interfaces/vjoystick_thumb.png");
+    background_tex->setAliasTexParameters();
+    thumb_tex->setAliasTexParameters();
+    CCSprite* background_sprite = CCSprite::createWithTexture(background_tex);
+    CCSprite* thumb_sprite = CCSprite::createWithTexture(thumb_tex);
+    
+    // とりあえずSneaky Inputを表示するだけしてみる
+    SneakyJoystick* joystick = new SneakyJoystick();
+    joystick->setHasDeadzone(true);
+    joystick->setAutoCenter(true);
+    joystick->setDeadRadius(20.0f);
+    SneakyJoystickSkinnedBase* base = SneakyJoystickSkinnedBase::create();
+    base->setBackgroundSprite(background_sprite);
+    base->setThumbSprite(thumb_sprite);
+    base->setJoystick(joystick);
+    const CCSize s = CCDirector::sharedDirector()->getWinSize();
+    base->setPosition(ccp(s.width / 2, s.height / 2));
+    base->setTag(kVirtualPadBaseTags);
+    this->addChild(base, 128);
+    
+    // Virtual Padの非表示
+    base->setVisible(false);
+}
+
+bool MapScene::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
+{
+    CCLOG("touch began");
+    
+    // virtual padを取得して表示化する
+    SneakyJoystickSkinnedBase* base = (SneakyJoystickSkinnedBase*)this->getChildByTag(kVirtualPadBaseTags);
+    SneakyJoystick* joystick = base->getJoystick();
+    base->setVisible(true);
+    base->setPosition(ccp(pTouch->getLocation().x, pTouch->getLocation().y));
+    
+    joystick->ccTouchBegan(pTouch, pEvent);
+    
+    return true;
+}
+
+void MapScene::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
+{
+    CCLOG("touch moved");
+    SneakyJoystickSkinnedBase* base = (SneakyJoystickSkinnedBase*)this->getChildByTag(kVirtualPadBaseTags);
+    SneakyJoystick* joystick = base->getJoystick();
+    
+    joystick->ccTouchMoved(pTouch, pEvent);
+    
+    CCPoint point = joystick->getVelocity();
+    
+    CCLOG("move x:%2.1f, y:%2.1f", point.x, point.y);
+}
+
+void MapScene::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
+{
+    CCLOG("touch ended");
+    
+    SneakyJoystickSkinnedBase* base = (SneakyJoystickSkinnedBase*)this->getChildByTag(kVirtualPadBaseTags);
+    base->setVisible(false);
 }

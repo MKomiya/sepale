@@ -236,6 +236,11 @@
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
 		D06F7D7018517C6A0020DBF4 /* charachip in Resources */ = {isa = PBXBuildFile; fileRef = D06F7D6F18517C6A0020DBF4 /* charachip */; };
 		D095045418514938006BD4D9 /* MapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D095045218514938006BD4D9 /* MapScene.cpp */; };
+		D0B4322D1854C06F003152D9 /* interfaces in Resources */ = {isa = PBXBuildFile; fileRef = D0B4322C1854C06F003152D9 /* interfaces */; };
+		D0B432361854C0A7003152D9 /* SneakyButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B4322E1854C0A7003152D9 /* SneakyButton.cpp */; };
+		D0B432371854C0A7003152D9 /* SneakyButtonSkinnedBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B432301854C0A7003152D9 /* SneakyButtonSkinnedBase.cpp */; };
+		D0B432381854C0A7003152D9 /* SneakyJoystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B432321854C0A7003152D9 /* SneakyJoystick.cpp */; };
+		D0B432391854C0A7003152D9 /* SneakyJoystickSkinnedBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B432341854C0A7003152D9 /* SneakyJoystickSkinnedBase.cpp */; };
 		D41A0AD1160F154A004552AE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D41A0AD0160F154A004552AE /* Default-568h@2x.png */; };
 		D446FD6E16102124000ADA7B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D446FD6D16102124000ADA7B /* Default@2x.png */; };
 		D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620B132DFF330009C878 /* OpenAL.framework */; };
@@ -729,6 +734,15 @@
 		D06F7D6F18517C6A0020DBF4 /* charachip */ = {isa = PBXFileReference; lastKnownFileType = folder; path = charachip; sourceTree = "<group>"; };
 		D095045218514938006BD4D9 /* MapScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapScene.cpp; sourceTree = "<group>"; };
 		D095045318514938006BD4D9 /* MapScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapScene.h; sourceTree = "<group>"; };
+		D0B4322C1854C06F003152D9 /* interfaces */ = {isa = PBXFileReference; lastKnownFileType = folder; path = interfaces; sourceTree = "<group>"; };
+		D0B4322E1854C0A7003152D9 /* SneakyButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SneakyButton.cpp; path = ../Classes/SneakyButton.cpp; sourceTree = "<group>"; };
+		D0B4322F1854C0A7003152D9 /* SneakyButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SneakyButton.h; path = ../Classes/SneakyButton.h; sourceTree = "<group>"; };
+		D0B432301854C0A7003152D9 /* SneakyButtonSkinnedBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SneakyButtonSkinnedBase.cpp; path = ../Classes/SneakyButtonSkinnedBase.cpp; sourceTree = "<group>"; };
+		D0B432311854C0A7003152D9 /* SneakyButtonSkinnedBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SneakyButtonSkinnedBase.h; path = ../Classes/SneakyButtonSkinnedBase.h; sourceTree = "<group>"; };
+		D0B432321854C0A7003152D9 /* SneakyJoystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SneakyJoystick.cpp; path = ../Classes/SneakyJoystick.cpp; sourceTree = "<group>"; };
+		D0B432331854C0A7003152D9 /* SneakyJoystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SneakyJoystick.h; path = ../Classes/SneakyJoystick.h; sourceTree = "<group>"; };
+		D0B432341854C0A7003152D9 /* SneakyJoystickSkinnedBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SneakyJoystickSkinnedBase.cpp; path = ../Classes/SneakyJoystickSkinnedBase.cpp; sourceTree = "<group>"; };
+		D0B432351854C0A7003152D9 /* SneakyJoystickSkinnedBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SneakyJoystickSkinnedBase.h; path = ../Classes/SneakyJoystickSkinnedBase.h; sourceTree = "<group>"; };
 		D41A0AD0160F154A004552AE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../proj.ios/Default-568h@2x.png"; sourceTree = "<group>"; };
 		D446FD6D16102124000ADA7B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../proj.ios/Default@2x.png"; sourceTree = "<group>"; };
 		D44C620B132DFF330009C878 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
@@ -1261,6 +1275,14 @@
 				1AFAF8B416D35DE700DB1158 /* AppDelegate.h */,
 				D095045218514938006BD4D9 /* MapScene.cpp */,
 				D095045318514938006BD4D9 /* MapScene.h */,
+				D0B4322E1854C0A7003152D9 /* SneakyButton.cpp */,
+				D0B4322F1854C0A7003152D9 /* SneakyButton.h */,
+				D0B432301854C0A7003152D9 /* SneakyButtonSkinnedBase.cpp */,
+				D0B432311854C0A7003152D9 /* SneakyButtonSkinnedBase.h */,
+				D0B432321854C0A7003152D9 /* SneakyJoystick.cpp */,
+				D0B432331854C0A7003152D9 /* SneakyJoystick.h */,
+				D0B432341854C0A7003152D9 /* SneakyJoystickSkinnedBase.cpp */,
+				D0B432351854C0A7003152D9 /* SneakyJoystickSkinnedBase.h */,
 			);
 			name = Classes;
 			path = ../classes;
@@ -1706,10 +1728,11 @@
 			isa = PBXGroup;
 			children = (
 				D06F7D6F18517C6A0020DBF4 /* charachip */,
-				7855E0DF153FEF240059DD9A /* Default.png */,
-				D41A0AD0160F154A004552AE /* Default-568h@2x.png */,
+				D0B4322C1854C06F003152D9 /* interfaces */,
 				D446FD6D16102124000ADA7B /* Default@2x.png */,
+				D41A0AD0160F154A004552AE /* Default-568h@2x.png */,
 				D4EF949B15BD2D8E00D803EB /* Icon-114.png */,
+				7855E0DF153FEF240059DD9A /* Default.png */,
 				D4EF949F15BD2D9800D803EB /* Icon-144.png */,
 				D4EF949915BD2D8B00D803EB /* Icon-57.png */,
 				D4EF949D15BD2D9600D803EB /* Icon-72.png */,
@@ -1797,6 +1820,7 @@
 				15A3D9961682F7F9002FB0C5 /* CMakeLists.txt in Resources */,
 				379BB9CC17F03F3700829B88 /* json_internalarray.inl in Resources */,
 				379BB9CD17F03F3700829B88 /* json_internalmap.inl in Resources */,
+				D0B4322D1854C06F003152D9 /* interfaces in Resources */,
 				379BB9D017F03F3700829B88 /* json_valueiterator.inl in Resources */,
 				379BB9D217F03F3700829B88 /* sconscript in Resources */,
 				D06F7D7018517C6A0020DBF4 /* charachip in Resources */,
@@ -1874,6 +1898,7 @@
 				15A3D9A61682F7F9002FB0C5 /* cpBody.c in Sources */,
 				15A3D9A71682F7F9002FB0C5 /* cpCollision.c in Sources */,
 				15A3D9A81682F7F9002FB0C5 /* cpHashSet.c in Sources */,
+				D0B432371854C0A7003152D9 /* SneakyButtonSkinnedBase.cpp in Sources */,
 				15A3D9A91682F7F9002FB0C5 /* cpPolyShape.c in Sources */,
 				15A3D9AA1682F7F9002FB0C5 /* cpShape.c in Sources */,
 				15A3D9AB1682F7F9002FB0C5 /* cpSpace.c in Sources */,
@@ -1970,6 +1995,7 @@
 				379BB99917F03F3700829B88 /* CCActionObject.cpp in Sources */,
 				379BB99A17F03F3700829B88 /* CCArmatureAnimation.cpp in Sources */,
 				379BB99B17F03F3700829B88 /* CCProcessBase.cpp in Sources */,
+				D0B432381854C0A7003152D9 /* SneakyJoystick.cpp in Sources */,
 				379BB99C17F03F3700829B88 /* CCTween.cpp in Sources */,
 				379BB99D17F03F3700829B88 /* CCArmature.cpp in Sources */,
 				379BB99E17F03F3700829B88 /* CCBone.cpp in Sources */,
@@ -1992,9 +2018,11 @@
 				379BB9AF17F03F3700829B88 /* CCComController.cpp in Sources */,
 				379BB9B017F03F3700829B88 /* CCComRender.cpp in Sources */,
 				379BB9B117F03F3700829B88 /* CCInputDelegate.cpp in Sources */,
+				D0B432391854C0A7003152D9 /* SneakyJoystickSkinnedBase.cpp in Sources */,
 				379BB9B217F03F3700829B88 /* UIRootWidget.cpp in Sources */,
 				379BB9B317F03F3700829B88 /* UIWidget.cpp in Sources */,
 				379BB9B417F03F3700829B88 /* Layout.cpp in Sources */,
+				D0B432361854C0A7003152D9 /* SneakyButton.cpp in Sources */,
 				379BB9B617F03F3700829B88 /* LayoutParameter.cpp in Sources */,
 				379BB9B717F03F3700829B88 /* UILayoutDefine.cpp in Sources */,
 				379BB9B817F03F3700829B88 /* CocosGUI.cpp in Sources */,
