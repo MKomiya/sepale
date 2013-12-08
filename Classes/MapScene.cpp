@@ -28,6 +28,9 @@ bool MapScene::init()
         return false;
     }
     
+    // メンバ変数初期化
+    _mover = kMoveNo;
+    
     // タップの有効化
     this->setTouchEnabled(true);
     this->setTouchMode(kCCTouchesOneByOne);
@@ -36,6 +39,38 @@ bool MapScene::init()
     _initVirtualPad();
     
     return true;
+}
+
+void MapScene::schedulePlayerMover(float dt)
+{
+    CCSprite* player = (CCSprite*)this->getChildByTag(kPlayerTags);
+    CCAction* move_sequence = player->getActionByTag(kPlayerMoveTags);
+    if(move_sequence != NULL)
+    {
+        return ;
+    }
+    
+    CCPoint move_pos = ccp(0.f, 0.f);
+    switch (_mover) {
+        case kMoveUp:
+            move_pos = ccp(0.f, 16.f);
+            break;
+        case kMoveRight:
+            move_pos = ccp(16.f, 0.f);
+            break;
+        case kMoveDown:
+            move_pos = ccp(0.f, -16.f);
+            break;
+        case kMoveLeft:
+            move_pos = ccp(-16.f, 0.f);
+            break;
+        case kMoveNo:
+            return;
+    }
+    
+    CCMoveBy* move_act = CCMoveBy::create(0.3f, move_pos);
+    move_act->setTag(kPlayerMoveTags);
+    player->runAction(move_act);
 }
 
 void MapScene::_viewPlayerCharacter()
@@ -55,11 +90,15 @@ void MapScene::_viewPlayerCharacter()
     CCAnimation* animation = cache->animationByName("down_anime");
     CCAnimate* action = CCAnimate::create(animation);
     action->setTag(kPlayerAnimateTags);
+    sprite->setTag(kPlayerTags);
     sprite->runAction(action);
     
     CCSize winSize = CCDirector::sharedDirector()->getWinSize();
     sprite->setPosition(ccp(winSize.width/2, winSize.height/2 + 40));
     this->addChild(sprite);
+    
+    // プレイヤー移動のスケジューラ登録
+    this->schedule(schedule_selector(MapScene::schedulePlayerMover));
 }
 
 void MapScene::_initVirtualPad()
@@ -114,13 +153,42 @@ void MapScene::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
     joystick->ccTouchMoved(pTouch, pEvent);
     
     CCPoint point = joystick->getVelocity();
-    
     CCLOG("move x:%2.1f, y:%2.1f", point.x, point.y);
+    
+    float velocity_list[4] = {
+        // Up,   Right,   Down,     Left
+        point.y, point.x, -point.y, -point.x
+    };
+    int max_index = std::distance(velocity_list, std::max_element(velocity_list, velocity_list + 4));
+    
+    switch (max_index) {
+        case 0:
+            _mover = kMoveUp;
+            CCLOG("move up");
+            break;
+        case 1:
+            _mover = kMoveRight;
+            CCLOG("move right");
+            break;
+        case 2:
+            _mover = kMoveDown;
+            CCLOG("move down");
+            break;
+        case 3:
+            _mover = kMoveLeft;
+            CCLOG("move left");
+            break;
+        default:
+            _mover = kMoveNo;
+            break;
+    }
 }
 
 void MapScene::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 {
     CCLOG("touch ended");
+    
+    _mover = kMoveNo;
     
     SneakyJoystickSkinnedBase* base = (SneakyJoystickSkinnedBase*)this->getChildByTag(kVirtualPadBaseTags);
     base->setVisible(false);

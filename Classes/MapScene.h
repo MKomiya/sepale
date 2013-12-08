@@ -17,8 +17,16 @@ public:
     // CCNodeのタグ
     enum Tags
     {
-        kPlayerAnimateTags = 1,
-        kVirtualPadBaseTags = 2
+        kPlayerTags = 1,
+        kPlayerAnimateTags = 2,
+        kPlayerMoveTags = 3,
+        kVirtualPadBaseTags = 4
+    };
+    
+    // 移動方向のラベル
+    enum MoveDirection
+    {
+        kMoveNo, kMoveUp, kMoveRight, kMoveDown, kMoveLeft
     };
     
     virtual bool init();
@@ -30,12 +38,17 @@ public:
     virtual void ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
     virtual void ccTouchEnded(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
     
+    // moverを見てプレイヤーの移動を決定するスケジューラ
+    void schedulePlayerMover(float dt);
+    
 private:
     // ユーザが移動させるプレイヤーの表示
     void _viewPlayerCharacter();
     
     // Virtual Padの初期化
     void _initVirtualPad();
+    
+    MoveDirection _mover;
 };
 
 #endif /* defined(__sepale__MapScene__) */
