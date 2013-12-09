@@ -196,6 +196,10 @@ void MapScene::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
     // 向きが違っていたらアニメーションを変更させる
     if(_mover != tmp)
     {
+        // 移動命令の停止
+        CCSprite* p = (CCSprite*)this->getChildByTag(kPlayerTags);
+        p->stopActionByTag(kPlayerMoveTags);
+        
         switch (_mover) {
             case kMoveUp:
                 this->_changePlayerAnimation("up");
