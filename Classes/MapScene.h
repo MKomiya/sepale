@@ -51,6 +51,7 @@ private:
     // プレイヤのアニメーション変更
     void _changePlayerAnimation(std::string direction);
     
+    
     MoveDirection _mover;
 };
 

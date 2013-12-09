@@ -6,6 +6,7 @@
 //
 //
 
+#include <algorithm>
 #include "MapScene.h"
 
 #include "SneakyJoystickSkinnedBase.h"
@@ -147,6 +148,7 @@ bool MapScene::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 void MapScene::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 {
     CCLOG("touch moved");
+
     SneakyJoystickSkinnedBase* base = (SneakyJoystickSkinnedBase*)this->getChildByTag(kVirtualPadBaseTags);
     SneakyJoystick* joystick = base->getJoystick();
     
@@ -161,25 +163,23 @@ void MapScene::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
     };
     int max_index = std::distance(velocity_list, std::max_element(velocity_list, velocity_list + 4));
     
+    // 前回の移動方向を保持
+    MoveDirection tmp = _mover;
     switch (max_index) {
         case 0:
             _mover = kMoveUp;
-            this->_changePlayerAnimation("up");
             CCLOG("move up");
             break;
         case 1:
             _mover = kMoveRight;
-            this->_changePlayerAnimation("right");
             CCLOG("move right");
             break;
         case 2:
             _mover = kMoveDown;
-            this->_changePlayerAnimation("down");
             CCLOG("move down");
             break;
         case 3:
             _mover = kMoveLeft;
-            this->_changePlayerAnimation("left");
             CCLOG("move left");
             break;
         default:
@@ -191,6 +191,25 @@ void MapScene::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
     if(fabsf(velocity_list[max_index]) <= 0.8f)
     {
         _mover = kMoveNo;
+    }
+    
+    // 向きが違っていたらアニメーションを変更させる
+    if(_mover != tmp)
+    {
+        switch (_mover) {
+            case kMoveUp:
+                this->_changePlayerAnimation("up");
+                break;
+            case kMoveRight:
+                this->_changePlayerAnimation("right");
+                break;
+            case kMoveDown:
+                this->_changePlayerAnimation("down");
+                break;
+            case kMoveLeft:
+                this->_changePlayerAnimation("left");
+                break;
+        }
     }
 }
 
