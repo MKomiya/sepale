@@ -164,18 +164,22 @@ void MapScene::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
     switch (max_index) {
         case 0:
             _mover = kMoveUp;
+            this->_changePlayerAnimation("up");
             CCLOG("move up");
             break;
         case 1:
             _mover = kMoveRight;
+            this->_changePlayerAnimation("right");
             CCLOG("move right");
             break;
         case 2:
             _mover = kMoveDown;
+            this->_changePlayerAnimation("down");
             CCLOG("move down");
             break;
         case 3:
             _mover = kMoveLeft;
+            this->_changePlayerAnimation("left");
             CCLOG("move left");
             break;
         default:
@@ -192,4 +196,16 @@ void MapScene::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
     
     SneakyJoystickSkinnedBase* base = (SneakyJoystickSkinnedBase*)this->getChildByTag(kVirtualPadBaseTags);
     base->setVisible(false);
+}
+
+void MapScene::_changePlayerAnimation(std::string direction)
+{
+    std::string anime_name = direction + "_anime";
+    CCAnimation* animation = CCAnimationCache::sharedAnimationCache()->animationByName(anime_name.c_str());
+    CCAnimate* animate = CCAnimate::create(animation);
+    animate->setTag(kPlayerAnimateTags);
+    
+    CCSprite* player = (CCSprite*)this->getChildByTag(kPlayerTags);
+    player->stopActionByTag(kPlayerAnimateTags);
+    player->runAction(animate);
 }
