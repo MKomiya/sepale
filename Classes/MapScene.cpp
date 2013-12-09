@@ -115,7 +115,7 @@ void MapScene::_initVirtualPad()
     SneakyJoystick* joystick = new SneakyJoystick();
     joystick->setHasDeadzone(true);
     joystick->setAutoCenter(true);
-    joystick->setDeadRadius(20.0f);
+    joystick->setDeadRadius(8.0f);
     SneakyJoystickSkinnedBase* base = SneakyJoystickSkinnedBase::create();
     base->setBackgroundSprite(background_sprite);
     base->setThumbSprite(thumb_sprite);
@@ -185,6 +185,12 @@ void MapScene::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
         default:
             _mover = kMoveNo;
             break;
+    }
+    
+    // 傾きが小さければ移動判定にしない
+    if(fabsf(velocity_list[max_index]) <= 0.8f)
+    {
+        _mover = kMoveNo;
     }
 }
 
