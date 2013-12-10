@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="18" height="18" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="map" tilewidth="16" tileheight="16">
+  <image source="map.png" width="48" height="64"/>
+ </tileset>
+ <tileset firstgid="13" name="meta" tilewidth="16" tileheight="16">
+  <image source="meta.png" width="48" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="Collidable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="Collidable" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="16" name="rival" tilewidth="16" tileheight="16">
+  <image source="../charachip/rival.png" width="48" height="64"/>
+  <tile id="4">
+   <properties>
+    <property name="func" value="talkLieutenant"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="func" value="talkRival"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="ground" width="18" height="18">
+  <data encoding="base64" compression="zlib">
+   eJxjZ2BgYB/Fo3gUj+JRzAAAhPII3Q==
+  </data>
+ </layer>
+ <layer name="object" width="18" height="18">
+  <data encoding="base64" compression="zlib">
+   eJzFks0KACAIgz324/s/bwUdIobKJBp8dFDGwqmI6KQA1JihvQWSNUN7i3pg+fRJ2y/yOXNm8ljzrM+dj/WJ6qVPJUA+XueYHmb+9dsn2hHPJyrvXlF592L6gvIwfUEMzloF1Q==
+  </data>
+ </layer>
+ <layer name="npc" width="18" height="18">
+  <data encoding="base64" compression="zlib">
+   eJxjYKA+EKeBmYSAyADYOQpGwSgYXgAAx5QALA==
+  </data>
+ </layer>
+ <layer name="meta" width="18" height="18">
+  <data encoding="base64" compression="zlib">
+   eJzjY2Bg4KMi5kWieZH46GLYMLo5uOQJiRNyE63dM1DmEIuHgjnUSIeD0V8DbQ4l+skxh5bxRK20gowBAkkQ5g==
+  </data>
+ </layer>
+</map>

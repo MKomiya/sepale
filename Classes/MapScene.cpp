@@ -36,6 +36,7 @@ bool MapScene::init()
     this->setTouchEnabled(true);
     this->setTouchMode(kCCTouchesOneByOne);
     
+    _viewMap();
     _viewPlayerCharacter();
     _initVirtualPad();
     
@@ -44,9 +45,9 @@ bool MapScene::init()
 
 void MapScene::schedulePlayerMover(float dt)
 {
+    /*
     CCSprite* player = (CCSprite*)this->getChildByTag(kPlayerTags);
-    CCAction* move_sequence = player->getActionByTag(kPlayerMoveTags);
-    if(move_sequence != NULL)
+    if(player->getActionByTag(kPlayerMoveTags) != NULL)
     {
         return ;
     }
@@ -72,6 +73,89 @@ void MapScene::schedulePlayerMover(float dt)
     CCMoveBy* move_act = CCMoveBy::create(0.3f, move_pos);
     move_act->setTag(kPlayerMoveTags);
     player->runAction(move_act);
+     */
+    
+    CCTMXTiledMap* map = (CCTMXTiledMap*)this->getChildByTag(kMapTags);
+    if(map->getActionByTag(kPlayerMoveTags) != NULL)
+    {
+        return ;
+    }
+    
+    CCPoint move_pos = ccp(0.f, 0.f);
+    switch (_mover) {
+        case kMoveUp:
+            move_pos = ccp(0.f, 16.f);
+            break;
+        case kMoveRight:
+            move_pos = ccp(16.f, 0.f);
+            break;
+        case kMoveDown:
+            move_pos = ccp(0.f, -16.f);
+            break;
+        case kMoveLeft:
+            move_pos = ccp(-16.f, 0.f);
+            break;
+        case kMoveNo:
+            return;
+    }
+    move_pos = -move_pos;
+    
+    CCMoveBy* move_act = CCMoveBy::create(0.3f, move_pos);
+    move_act->setTag(kPlayerMoveTags);
+    map->runAction(move_act);
+}
+
+void MapScene::movePlayerOneStep()
+{
+    CCSprite* player = (CCSprite*)this->getChildByTag(kPlayerTags);
+    
+    CCPoint move_pos = ccp(0.f, 0.f);
+    switch (_mover) {
+        case kMoveUp:
+            move_pos = ccp(0.f, 16.f);
+            break;
+        case kMoveRight:
+            move_pos = ccp(16.f, 0.f);
+            break;
+        case kMoveDown:
+            move_pos = ccp(0.f, -16.f);
+            break;
+        case kMoveLeft:
+            move_pos = ccp(-16.f, 0.f);
+            break;
+        case kMoveNo:
+            return;
+    }
+    
+    CCMoveBy* move_act = CCMoveBy::create(0.3f, move_pos);
+    move_act->setTag(kPlayerMoveTags);
+    player->runAction(move_act);
+}
+
+void MapScene::moveMapTwoStep()
+{
+    CCTMXTiledMap* map = (CCTMXTiledMap*)this->getChildByTag(kMapTags);
+    
+    CCPoint move_pos = ccp(0.f, 0.f);
+    switch (_mover) {
+        case kMoveUp:
+            move_pos = ccp(0.f, -32.f);
+            break;
+        case kMoveRight:
+            move_pos = ccp(-32.f, 0.f);
+            break;
+        case kMoveDown:
+            move_pos = ccp(0.f, 32.f);
+            break;
+        case kMoveLeft:
+            move_pos = ccp(32.f, 0.f);
+            break;
+        case kMoveNo:
+            return;
+    }
+    
+    CCMoveBy* mover = CCMoveBy::create(0.3f, move_pos);
+    map->runAction(mover);
 }
 
 void MapScene::_viewPlayerCharacter()
@@ -94,8 +178,8 @@ void MapScene::_viewPlayerCharacter()
     sprite->setTag(kPlayerTags);
     sprite->runAction(action);
     
-    CCSize winSize = CCDirector::sharedDirector()->getWinSize();
-    sprite->setPosition(ccp(winSize.width/2, winSize.height/2 + 40));
+    sprite->setAnchorPoint(ccp(0, 1));
+    sprite->setPosition(ccp(5 * 16.f, 8 * 16.f));
     this->addChild(sprite);
     
     // プレイヤー移動のスケジューラ登録
@@ -239,6 +323,8 @@ void MapScene::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
             case kMoveLeft:
                 this->_changePlayerAnimation("left");
                 break;
+            case kMoveNo:
+                break;
         }
     }
 }
@@ -266,4 +352,36 @@ void MapScene::_changePlayerAnimation(std::string direction)
     CCSprite* player = (CCSprite*)this->getChildByTag(kPlayerTags);
     player->stopActionByTag(kPlayerAnimateTags);
     player->runAction(animate);
+}
+
+void MapScene::_viewMap()
+{
+    const CCSize s = CCDirector::sharedDirector()->getWinSize();
+    
+    CCTMXTiledMap* map = CCTMXTiledMap::create("map/testmap.tmx");
+    map->setPosition(0, s.height);
+    map->setAnchorPoint(ccp(0, 1));
+    map->setTag(kMapTags);
+    this->addChild(map);
+    
+    CCTMXLayer* metamap = map->layerNamed("meta");
+    metamap->setVisible(false);
+}
+
+bool MapScene::_checkCollidable(int gid_x, int gid_y)
+{
+    CCTMXTiledMap* map = (CCTMXTiledMap*)this->getChildByTag(kMapTags);
+    CCTMXLayer* metamap = map->layerNamed("meta");
+    unsigned int tiled_gid = metamap->tileGIDAt(ccp(gid_x, gid_y));
+    if(tiled_gid == 0) return false;
+    
+    CCDictionary* dict = map->propertiesForGID(tiled_gid);
+    if(dict == NULL) return false;
+    
+    const CCString* collision =  dict->valueForKey("Collidable");
+    if(strcmp(collision->getCString(), "true") == 0)
+    {
+        return true;
+    }
+    return false;
 }

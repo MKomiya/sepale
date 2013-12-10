@@ -21,7 +21,8 @@ public:
         kPlayerAnimateTags = 2,
         kPlayerMoveTags = 3,
         kVirtualPadBaseTags = 4,
-        kVirtualPadSelectedTags = 5
+        kVirtualPadSelectedTags = 5,
+        kMapTags = 6
     };
     
     // 移動方向のラベル
@@ -42,6 +43,12 @@ public:
     // moverを見てプレイヤーの移動を決定するスケジューラ
     void schedulePlayerMover(float dt);
     
+    // プレイヤーを一歩だけ動かす
+    void movePlayerOneStep();
+    
+    // マップを二歩分動かす
+    void moveMapTwoStep();
+    
 private:
     // ユーザが移動させるプレイヤーの表示
     void _viewPlayerCharacter();
@@ -52,6 +59,11 @@ private:
     // プレイヤのアニメーション変更
     void _changePlayerAnimation(std::string direction);
     
+    // マップの表示
+    void _viewMap();
+    
+    // マップオブジェクトとの衝突判定
+    bool _checkCollidable(int gid_x, int gid_y);
     
     MoveDirection _mover;
 };
