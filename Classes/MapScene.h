@@ -20,7 +20,8 @@ public:
         kPlayerTags = 1,
         kPlayerAnimateTags = 2,
         kPlayerMoveTags = 3,
-        kVirtualPadBaseTags = 4
+        kVirtualPadBaseTags = 4,
+        kVirtualPadSelectedTags = 5
     };
     
     // 移動方向のラベル

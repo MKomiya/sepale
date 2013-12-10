@@ -107,8 +107,10 @@ void MapScene::_initVirtualPad()
     // Texture読み込みとエイジング無効化
     CCTexture2D* background_tex = CCTextureCache::sharedTextureCache()->addImage("interfaces/vjoystick_background.png");
     CCTexture2D* thumb_tex = CCTextureCache::sharedTextureCache()->addImage("interfaces/vjoystick_thumb.png");
+    CCTexture2D* selected_tex = CCTextureCache::sharedTextureCache()->addImage("interfaces/vjoystick_selected.png");
     background_tex->setAliasTexParameters();
     thumb_tex->setAliasTexParameters();
+    selected_tex->setAliasTexParameters();
     CCSprite* background_sprite = CCSprite::createWithTexture(background_tex);
     CCSprite* thumb_sprite = CCSprite::createWithTexture(thumb_tex);
     
@@ -128,6 +130,15 @@ void MapScene::_initVirtualPad()
     
     // Virtual Padの非表示
     base->setVisible(false);
+    
+    // 光るところ
+    CCSprite* selected = CCSprite::createWithTexture(selected_tex);
+    selected->setPosition(base->getPosition());
+    selected->setTag(kVirtualPadSelectedTags);
+    this->addChild(selected, 129);
+    
+    selected->setVisible(false);
+    
 }
 
 bool MapScene::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
@@ -142,6 +153,9 @@ bool MapScene::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
     
     joystick->ccTouchBegan(pTouch, pEvent);
     
+    CCSprite* selected = (CCSprite*)this->getChildByTag(kVirtualPadSelectedTags);
+    selected->setPosition(pTouch->getLocation());
+    
     return true;
 }
 
@@ -153,6 +167,8 @@ void MapScene::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
     SneakyJoystick* joystick = base->getJoystick();
     
     joystick->ccTouchMoved(pTouch, pEvent);
+    
+    CCSprite* selected = (CCSprite*)this->getChildByTag(kVirtualPadSelectedTags);
     
     CCPoint point = joystick->getVelocity();
     CCLOG("move x:%2.1f, y:%2.1f", point.x, point.y);
@@ -168,22 +184,31 @@ void MapScene::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
     switch (max_index) {
         case 0:
             _mover = kMoveUp;
+            selected->setRotation(0.0f);
+            selected->setVisible(true);
             CCLOG("move up");
             break;
         case 1:
             _mover = kMoveRight;
+            selected->setRotation(90.0f);
+            selected->setVisible(true);
             CCLOG("move right");
             break;
         case 2:
             _mover = kMoveDown;
+            selected->setRotation(180.0f);
+            selected->setVisible(true);
             CCLOG("move down");
             break;
         case 3:
             _mover = kMoveLeft;
+            selected->setRotation(270.0f);
+            selected->setVisible(true);
             CCLOG("move left");
             break;
         default:
             _mover = kMoveNo;
+            selected->setVisible(false);
             break;
     }
     
@@ -191,6 +216,7 @@ void MapScene::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
     if(fabsf(velocity_list[max_index]) <= 0.8f)
     {
         _mover = kMoveNo;
+        selected->setVisible(false);
     }
     
     // 向きが違っていたらアニメーションを変更させる
@@ -225,6 +251,9 @@ void MapScene::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
     
     SneakyJoystickSkinnedBase* base = (SneakyJoystickSkinnedBase*)this->getChildByTag(kVirtualPadBaseTags);
     base->setVisible(false);
+    
+    CCSprite* selected = (CCSprite*)this->getChildByTag(kVirtualPadSelectedTags);
+    selected->setVisible(false);
 }
 
 void MapScene::_changePlayerAnimation(std::string direction)
