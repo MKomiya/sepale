@@ -31,6 +31,7 @@ bool MapScene::init()
     
     // メンバ変数初期化
     _mover = kMoveNo;
+    _player_pos = ccp(4, 6);
     
     // タップの有効化
     this->setTouchEnabled(true);
@@ -45,117 +46,46 @@ bool MapScene::init()
 
 void MapScene::schedulePlayerMover(float dt)
 {
-    /*
-    CCSprite* player = (CCSprite*)this->getChildByTag(kPlayerTags);
-    if(player->getActionByTag(kPlayerMoveTags) != NULL)
-    {
-        return ;
-    }
-    
-    CCPoint move_pos = ccp(0.f, 0.f);
-    switch (_mover) {
-        case kMoveUp:
-            move_pos = ccp(0.f, 16.f);
-            break;
-        case kMoveRight:
-            move_pos = ccp(16.f, 0.f);
-            break;
-        case kMoveDown:
-            move_pos = ccp(0.f, -16.f);
-            break;
-        case kMoveLeft:
-            move_pos = ccp(-16.f, 0.f);
-            break;
-        case kMoveNo:
-            return;
-    }
-    
-    CCMoveBy* move_act = CCMoveBy::create(0.3f, move_pos);
-    move_act->setTag(kPlayerMoveTags);
-    player->runAction(move_act);
-     */
-    
     CCTMXTiledMap* map = (CCTMXTiledMap*)this->getChildByTag(kMapTags);
-    if(map->getActionByTag(kPlayerMoveTags) != NULL)
+    if(map->getActionByTag(kMapMoveTags) != NULL)
     {
         return ;
     }
     
     CCPoint move_pos = ccp(0.f, 0.f);
+    CCPoint next_pos = _player_pos;
     switch (_mover) {
         case kMoveUp:
             move_pos = ccp(0.f, 16.f);
+            next_pos.y -= 1;
             break;
         case kMoveRight:
             move_pos = ccp(16.f, 0.f);
+            next_pos.x += 1;
             break;
         case kMoveDown:
             move_pos = ccp(0.f, -16.f);
+            next_pos.y += 1;
             break;
         case kMoveLeft:
             move_pos = ccp(-16.f, 0.f);
+            next_pos.x -= 1;
             break;
         case kMoveNo:
             return;
     }
     move_pos = -move_pos;
     
+    if(_checkCollidable(next_pos.x, next_pos.y))
+    {
+        _mover = kMoveNo;
+        return;
+    }
+    
+    _player_pos = next_pos;
     CCMoveBy* move_act = CCMoveBy::create(0.3f, move_pos);
-    move_act->setTag(kPlayerMoveTags);
+    move_act->setTag(kMapMoveTags);
     map->runAction(move_act);
-}
-
-void MapScene::movePlayerOneStep()
-{
-    CCSprite* player = (CCSprite*)this->getChildByTag(kPlayerTags);
-    
-    CCPoint move_pos = ccp(0.f, 0.f);
-    switch (_mover) {
-        case kMoveUp:
-            move_pos = ccp(0.f, 16.f);
-            break;
-        case kMoveRight:
-            move_pos = ccp(16.f, 0.f);
-            break;
-        case kMoveDown:
-            move_pos = ccp(0.f, -16.f);
-            break;
-        case kMoveLeft:
-            move_pos = ccp(-16.f, 0.f);
-            break;
-        case kMoveNo:
-            return;
-    }
-    
-    CCMoveBy* move_act = CCMoveBy::create(0.3f, move_pos);
-    move_act->setTag(kPlayerMoveTags);
-    player->runAction(move_act);
-}
-
-void MapScene::moveMapTwoStep()
-{
-    CCTMXTiledMap* map = (CCTMXTiledMap*)this->getChildByTag(kMapTags);
-    
-    CCPoint move_pos = ccp(0.f, 0.f);
-    switch (_mover) {
-        case kMoveUp:
-            move_pos = ccp(0.f, -32.f);
-            break;
-        case kMoveRight:
-            move_pos = ccp(-32.f, 0.f);
-            break;
-        case kMoveDown:
-            move_pos = ccp(0.f, 32.f);
-            break;
-        case kMoveLeft:
-            move_pos = ccp(32.f, 0.f);
-            break;
-        case kMoveNo:
-            return;
-    }
-    
-    CCMoveBy* mover = CCMoveBy::create(0.3f, move_pos);
-    map->runAction(mover);
 }
 
 void MapScene::_viewPlayerCharacter()
@@ -177,9 +107,10 @@ void MapScene::_viewPlayerCharacter()
     action->setTag(kPlayerAnimateTags);
     sprite->setTag(kPlayerTags);
     sprite->runAction(action);
-    
+
+    const CCSize s = CCDirector::sharedDirector()->getWinSize();
     sprite->setAnchorPoint(ccp(0, 1));
-    sprite->setPosition(ccp(5 * 16.f, 8 * 16.f));
+    sprite->setPosition(ccp(_player_pos.x * 16.f, s.height -  _player_pos.y * 16.f));
     this->addChild(sprite);
     
     // プレイヤー移動のスケジューラ登録
@@ -247,16 +178,12 @@ void MapScene::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 {
     CCLOG("touch moved");
 
+    CCSprite* selected = (CCSprite*)this->getChildByTag(kVirtualPadSelectedTags);
     SneakyJoystickSkinnedBase* base = (SneakyJoystickSkinnedBase*)this->getChildByTag(kVirtualPadBaseTags);
     SneakyJoystick* joystick = base->getJoystick();
-    
     joystick->ccTouchMoved(pTouch, pEvent);
     
-    CCSprite* selected = (CCSprite*)this->getChildByTag(kVirtualPadSelectedTags);
-    
     CCPoint point = joystick->getVelocity();
-    CCLOG("move x:%2.1f, y:%2.1f", point.x, point.y);
-    
     float velocity_list[4] = {
         // Up,   Right,   Down,     Left
         point.y, point.x, -point.y, -point.x
@@ -305,11 +232,7 @@ void MapScene::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
     
     // 向きが違っていたらアニメーションを変更させる
     if(_mover != tmp)
-    {
-        // 移動命令の停止
-        CCSprite* p = (CCSprite*)this->getChildByTag(kPlayerTags);
-        p->stopActionByTag(kPlayerMoveTags);
-        
+    {        
         switch (_mover) {
             case kMoveUp:
                 this->_changePlayerAnimation("up");

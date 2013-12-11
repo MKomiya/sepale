@@ -17,7 +17,7 @@
   </tile>
  </tileset>
  <tileset firstgid="16" name="rival" tilewidth="16" tileheight="16">
-  <image source="../charachip/rival.png" width="48" height="64"/>
+  <image source="rival.png" width="48" height="64"/>
   <tile id="4">
    <properties>
     <property name="func" value="talkLieutenant"/>
