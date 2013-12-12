@@ -1273,18 +1273,9 @@
 		15AA9C4015B7EC450033D6C2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				D0675D001859769300AE87EF /* MapScene */,
 				1AFAF8B316D35DE700DB1158 /* AppDelegate.cpp */,
 				1AFAF8B416D35DE700DB1158 /* AppDelegate.h */,
-				D095045218514938006BD4D9 /* MapScene.cpp */,
-				D095045318514938006BD4D9 /* MapScene.h */,
-				D0B4322E1854C0A7003152D9 /* SneakyButton.cpp */,
-				D0B4322F1854C0A7003152D9 /* SneakyButton.h */,
-				D0B432301854C0A7003152D9 /* SneakyButtonSkinnedBase.cpp */,
-				D0B432311854C0A7003152D9 /* SneakyButtonSkinnedBase.h */,
-				D0B432321854C0A7003152D9 /* SneakyJoystick.cpp */,
-				D0B432331854C0A7003152D9 /* SneakyJoystick.h */,
-				D0B432341854C0A7003152D9 /* SneakyJoystickSkinnedBase.cpp */,
-				D0B432351854C0A7003152D9 /* SneakyJoystickSkinnedBase.h */,
 			);
 			name = Classes;
 			path = ../classes;
@@ -1742,6 +1733,31 @@
 			);
 			name = Resources;
 			path = ../Resources;
+			sourceTree = "<group>";
+		};
+		D0675D001859769300AE87EF /* MapScene */ = {
+			isa = PBXGroup;
+			children = (
+				D0675D01185976A900AE87EF /* SneakyInput */,
+				D095045218514938006BD4D9 /* MapScene.cpp */,
+				D095045318514938006BD4D9 /* MapScene.h */,
+			);
+			name = MapScene;
+			sourceTree = "<group>";
+		};
+		D0675D01185976A900AE87EF /* SneakyInput */ = {
+			isa = PBXGroup;
+			children = (
+				D0B4322E1854C0A7003152D9 /* SneakyButton.cpp */,
+				D0B4322F1854C0A7003152D9 /* SneakyButton.h */,
+				D0B432301854C0A7003152D9 /* SneakyButtonSkinnedBase.cpp */,
+				D0B432311854C0A7003152D9 /* SneakyButtonSkinnedBase.h */,
+				D0B432321854C0A7003152D9 /* SneakyJoystick.cpp */,
+				D0B432331854C0A7003152D9 /* SneakyJoystick.h */,
+				D0B432341854C0A7003152D9 /* SneakyJoystickSkinnedBase.cpp */,
+				D0B432351854C0A7003152D9 /* SneakyJoystickSkinnedBase.h */,
+			);
+			name = SneakyInput;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

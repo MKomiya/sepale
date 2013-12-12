@@ -46,12 +46,14 @@ bool MapScene::init()
 
 void MapScene::schedulePlayerMover(float dt)
 {
+    // マップを取得し，移動アクションがあるなら処理しない
     CCTMXTiledMap* map = (CCTMXTiledMap*)this->getChildByTag(kMapTags);
     if(map->getActionByTag(kMapMoveTags) != NULL)
     {
         return ;
     }
     
+    // 移動ベクトルと移動後のマップ座標を与えてやる
     CCPoint move_pos = ccp(0.f, 0.f);
     CCPoint next_pos = _player_pos;
     switch (_mover) {
@@ -74,14 +76,17 @@ void MapScene::schedulePlayerMover(float dt)
         case kMoveNo:
             return;
     }
-    move_pos = -move_pos;
+    move_pos = -move_pos; // マップの移動なので反転（キャラが上に行くときはマップが下に行く）
     
+    // 移動後マップ座標の衝突判定
     if(_checkCollidable(next_pos.x, next_pos.y))
     {
+        // 衝突するなら移動させず処理しない
         _mover = kMoveNo;
         return;
     }
     
+    // 移動処理を行う
     _player_pos = next_pos;
     CCMoveBy* move_act = CCMoveBy::create(0.3f, move_pos);
     move_act->setTag(kMapMoveTags);
@@ -108,6 +113,7 @@ void MapScene::_viewPlayerCharacter()
     sprite->setTag(kPlayerTags);
     sprite->runAction(action);
 
+    // プレイヤーの初期位置設定
     const CCSize s = CCDirector::sharedDirector()->getWinSize();
     sprite->setAnchorPoint(ccp(0, 1));
     sprite->setPosition(ccp(_player_pos.x * 16.f, s.height -  _player_pos.y * 16.f));
@@ -166,8 +172,10 @@ bool MapScene::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
     base->setVisible(true);
     base->setPosition(ccp(pTouch->getLocation().x, pTouch->getLocation().y));
     
+    // virtual pad上のタッチ開始処理を呼び出す
     joystick->ccTouchBegan(pTouch, pEvent);
     
+    // 選択された光のポジションを合わせる
     CCSprite* selected = (CCSprite*)this->getChildByTag(kVirtualPadSelectedTags);
     selected->setPosition(pTouch->getLocation());
     
@@ -258,6 +266,7 @@ void MapScene::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
     
     _mover = kMoveNo;
     
+    // 非表示
     SneakyJoystickSkinnedBase* base = (SneakyJoystickSkinnedBase*)this->getChildByTag(kVirtualPadBaseTags);
     base->setVisible(false);
     
@@ -267,6 +276,7 @@ void MapScene::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 
 void MapScene::_changePlayerAnimation(std::string direction)
 {
+    // 移動方向に対応したアニメーションを呼び出してプレイヤーにセット
     std::string anime_name = direction + "_anime";
     CCAnimation* animation = CCAnimationCache::sharedAnimationCache()->animationByName(anime_name.c_str());
     CCAnimate* animate = CCAnimate::create(animation);
@@ -281,12 +291,14 @@ void MapScene::_viewMap()
 {
     const CCSize s = CCDirector::sharedDirector()->getWinSize();
     
+    // マップを呼び出して表示する
     CCTMXTiledMap* map = CCTMXTiledMap::create("map/testmap.tmx");
     map->setPosition(0, s.height);
     map->setAnchorPoint(ccp(0, 1));
     map->setTag(kMapTags);
     this->addChild(map);
     
+    // 衝突判定につかうメタマップは非表示にする
     CCTMXLayer* metamap = map->layerNamed("meta");
     metamap->setVisible(false);
 }
