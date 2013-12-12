@@ -41,32 +41,48 @@ bool BattleScene::init()
     this->addChild(enemy);
     
     // ボタン
-    auto button1 = CCControlButton::create(CCLabelTTF::create("スキル", "Arial", 8), CCScale9Sprite::create("interfaces/button.png"));
+    auto button1 = CCControlButton::create(CCLabelTTF::create("スキル", "Arial", 16), CCScale9Sprite::create("interfaces/button.png"));
+    button1->getTitleLabel()->setScale(0.5f);
     button1->setZoomOnTouchDown(false);
     button1->setAnchorPoint(ccp(0, 0));
     button1->setPosition(ccp(16, 10));
     button1->setPreferredSize(CCSizeMake(60, 24));
+    auto pushed = CCScale9Sprite::create("interfaces/button.png");
+    pushed->setColor(ccc3(50, 80, 125));
+    button1->setBackgroundSpriteForState(pushed, CCControlStateHighlighted);
     this->addChild(button1);
     
-    auto button2 = CCControlButton::create(CCLabelTTF::create("にげる", "Arial", 8), CCScale9Sprite::create("interfaces/button.png"));
+    auto button2 = CCControlButton::create(CCLabelTTF::create("にげる", "Arial", 16), CCScale9Sprite::create("interfaces/button.png"));
+    button2->getTitleLabel()->setScale(0.5f);
     button2->setZoomOnTouchDown(false);
     button2->setAnchorPoint(ccp(1, 0));
     button2->setPosition(ccp(s.width - 16, 10));
     button2->setPreferredSize(button1->getPreferredSize());
+    pushed = CCScale9Sprite::create("interfaces/button.png");
+    pushed->setColor(ccc3(50, 80, 125));
+    button2->setBackgroundSpriteForState(pushed, CCControlStateHighlighted);
     this->addChild(button2);
     
-    auto button3 = CCControlButton::create(CCLabelTTF::create("たたかう", "Arial", 8), CCScale9Sprite::create("interfaces/button.png"));
+    auto button3 = CCControlButton::create(CCLabelTTF::create("たたかう", "Arial", 16), CCScale9Sprite::create("interfaces/button.png"));
+    button3->getTitleLabel()->setScale(0.5f);
     button3->setZoomOnTouchDown(false);
     button3->setAnchorPoint(ccp(0, 1));
     button3->setPosition(ccp(16, s.height - 160 - 10));
     button3->setPreferredSize(button1->getPreferredSize());
+    pushed = CCScale9Sprite::create("interfaces/button.png");
+    pushed->setColor(ccc3(50, 80, 125));
+    button3->setBackgroundSpriteForState(pushed, CCControlStateHighlighted);
     this->addChild(button3);
 
-    auto button4 = CCControlButton::create(CCLabelTTF::create("アイテム", "Arial", 8), CCScale9Sprite::create("interfaces/button.png"));
+    auto button4 = CCControlButton::create(CCLabelTTF::create("アイテム", "Arial", 16), CCScale9Sprite::create("interfaces/button.png"));
+    button4->getTitleLabel()->setScale(0.5f);
     button4->setZoomOnTouchDown(false);
     button4->setAnchorPoint(ccp(1, 1));
     button4->setPosition(ccp(s.width - 16, s.height - 160 - 10));
     button4->setPreferredSize(button1->getPreferredSize());
+    pushed = CCScale9Sprite::create("interfaces/button.png");
+    pushed->setColor(ccc3(50, 80, 125));
+    button4->setBackgroundSpriteForState(pushed, CCControlStateHighlighted);
     this->addChild(button4);
     
     return true;
