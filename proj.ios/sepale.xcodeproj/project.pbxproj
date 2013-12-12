@@ -234,6 +234,9 @@
 		BF1712461292920000B8313A /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB212928DE900B8313A /* libxml2.dylib */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
+		D0675D0518597C1D00AE87EF /* BattleScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0675D0318597C1D00AE87EF /* BattleScene.cpp */; };
+		D0675D071859803200AE87EF /* monster in Resources */ = {isa = PBXBuildFile; fileRef = D0675D061859803200AE87EF /* monster */; };
+		D0675D091859803900AE87EF /* battleback in Resources */ = {isa = PBXBuildFile; fileRef = D0675D081859803900AE87EF /* battleback */; };
 		D06F7D7018517C6A0020DBF4 /* charachip in Resources */ = {isa = PBXBuildFile; fileRef = D06F7D6F18517C6A0020DBF4 /* charachip */; };
 		D095045418514938006BD4D9 /* MapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D095045218514938006BD4D9 /* MapScene.cpp */; };
 		D0B4322D1854C06F003152D9 /* interfaces in Resources */ = {isa = PBXBuildFile; fileRef = D0B4322C1854C06F003152D9 /* interfaces */; };
@@ -732,6 +735,10 @@
 		BF170DB212928DE900B8313A /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		D0675D0318597C1D00AE87EF /* BattleScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BattleScene.cpp; path = ../Classes/BattleScene.cpp; sourceTree = "<group>"; };
+		D0675D0418597C1D00AE87EF /* BattleScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BattleScene.h; path = ../Classes/BattleScene.h; sourceTree = "<group>"; };
+		D0675D061859803200AE87EF /* monster */ = {isa = PBXFileReference; lastKnownFileType = folder; path = monster; sourceTree = "<group>"; };
+		D0675D081859803900AE87EF /* battleback */ = {isa = PBXFileReference; lastKnownFileType = folder; path = battleback; sourceTree = "<group>"; };
 		D06F7D6F18517C6A0020DBF4 /* charachip */ = {isa = PBXFileReference; lastKnownFileType = folder; path = charachip; sourceTree = "<group>"; };
 		D095045218514938006BD4D9 /* MapScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapScene.cpp; sourceTree = "<group>"; };
 		D095045318514938006BD4D9 /* MapScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapScene.h; sourceTree = "<group>"; };
@@ -1273,6 +1280,7 @@
 		15AA9C4015B7EC450033D6C2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				D0675D0218597B1700AE87EF /* BattleScene */,
 				D0675D001859769300AE87EF /* MapScene */,
 				1AFAF8B316D35DE700DB1158 /* AppDelegate.cpp */,
 				1AFAF8B416D35DE700DB1158 /* AppDelegate.h */,
@@ -1723,6 +1731,8 @@
 				D06F7D6F18517C6A0020DBF4 /* charachip */,
 				D0B4322C1854C06F003152D9 /* interfaces */,
 				D0CEE0BD18576FB500353EFB /* map */,
+				D0675D061859803200AE87EF /* monster */,
+				D0675D081859803900AE87EF /* battleback */,
 				D41A0AD0160F154A004552AE /* Default-568h@2x.png */,
 				D446FD6D16102124000ADA7B /* Default@2x.png */,
 				D4EF949B15BD2D8E00D803EB /* Icon-114.png */,
@@ -1758,6 +1768,15 @@
 				D0B432351854C0A7003152D9 /* SneakyJoystickSkinnedBase.h */,
 			);
 			name = SneakyInput;
+			sourceTree = "<group>";
+		};
+		D0675D0218597B1700AE87EF /* BattleScene */ = {
+			isa = PBXGroup;
+			children = (
+				D0675D0318597C1D00AE87EF /* BattleScene.cpp */,
+				D0675D0418597C1D00AE87EF /* BattleScene.h */,
+			);
+			name = BattleScene;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1841,9 +1860,11 @@
 				D0CEE0BE18576FB500353EFB /* map in Resources */,
 				379BB9CD17F03F3700829B88 /* json_internalmap.inl in Resources */,
 				D0B4322D1854C06F003152D9 /* interfaces in Resources */,
+				D0675D091859803900AE87EF /* battleback in Resources */,
 				379BB9D017F03F3700829B88 /* json_valueiterator.inl in Resources */,
 				379BB9D217F03F3700829B88 /* sconscript in Resources */,
 				D06F7D7018517C6A0020DBF4 /* charachip in Resources */,
+				D0675D071859803200AE87EF /* monster in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2016,6 +2037,7 @@
 				379BB99A17F03F3700829B88 /* CCArmatureAnimation.cpp in Sources */,
 				379BB99B17F03F3700829B88 /* CCProcessBase.cpp in Sources */,
 				D0B432381854C0A7003152D9 /* SneakyJoystick.cpp in Sources */,
+				D0675D0518597C1D00AE87EF /* BattleScene.cpp in Sources */,
 				379BB99C17F03F3700829B88 /* CCTween.cpp in Sources */,
 				379BB99D17F03F3700829B88 /* CCArmature.cpp in Sources */,
 				379BB99E17F03F3700829B88 /* CCBone.cpp in Sources */,

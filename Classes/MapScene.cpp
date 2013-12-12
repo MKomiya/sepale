@@ -148,8 +148,6 @@ void MapScene::_initVirtualPad()
     base->setPosition(ccp(s.width / 2, s.height / 2));
     base->setTag(kVirtualPadBaseTags);
     this->addChild(base, 128);
-    
-    // Virtual Padの非表示
     base->setVisible(false);
     
     // 光るところ
@@ -157,9 +155,7 @@ void MapScene::_initVirtualPad()
     selected->setPosition(base->getPosition());
     selected->setTag(kVirtualPadSelectedTags);
     this->addChild(selected, 129);
-    
     selected->setVisible(false);
-    
 }
 
 bool MapScene::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
