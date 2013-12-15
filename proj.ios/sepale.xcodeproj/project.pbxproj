@@ -245,6 +245,7 @@
 		D0B432381854C0A7003152D9 /* SneakyJoystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B432321854C0A7003152D9 /* SneakyJoystick.cpp */; };
 		D0B432391854C0A7003152D9 /* SneakyJoystickSkinnedBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B432341854C0A7003152D9 /* SneakyJoystickSkinnedBase.cpp */; };
 		D0CEE0BE18576FB500353EFB /* map in Resources */ = {isa = PBXBuildFile; fileRef = D0CEE0BD18576FB500353EFB /* map */; };
+		D0DDFCE6185DC5A500712A57 /* effects in Resources */ = {isa = PBXBuildFile; fileRef = D0DDFCE5185DC5A500712A57 /* effects */; };
 		D41A0AD1160F154A004552AE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D41A0AD0160F154A004552AE /* Default-568h@2x.png */; };
 		D446FD6E16102124000ADA7B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D446FD6D16102124000ADA7B /* Default@2x.png */; };
 		D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620B132DFF330009C878 /* OpenAL.framework */; };
@@ -752,6 +753,8 @@
 		D0B432341854C0A7003152D9 /* SneakyJoystickSkinnedBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SneakyJoystickSkinnedBase.cpp; path = ../Classes/SneakyJoystickSkinnedBase.cpp; sourceTree = "<group>"; };
 		D0B432351854C0A7003152D9 /* SneakyJoystickSkinnedBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SneakyJoystickSkinnedBase.h; path = ../Classes/SneakyJoystickSkinnedBase.h; sourceTree = "<group>"; };
 		D0CEE0BD18576FB500353EFB /* map */ = {isa = PBXFileReference; lastKnownFileType = folder; path = map; sourceTree = "<group>"; };
+		D0DDFCE5185DC5A500712A57 /* effects */ = {isa = PBXFileReference; lastKnownFileType = folder; path = effects; sourceTree = "<group>"; };
+		D0DDFCE7185DC63700712A57 /* characterStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = characterStatus.h; path = ../Classes/characterStatus.h; sourceTree = "<group>"; };
 		D41A0AD0160F154A004552AE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../proj.ios/Default-568h@2x.png"; sourceTree = "<group>"; };
 		D446FD6D16102124000ADA7B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../proj.ios/Default@2x.png"; sourceTree = "<group>"; };
 		D44C620B132DFF330009C878 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
@@ -1733,8 +1736,9 @@
 				D0CEE0BD18576FB500353EFB /* map */,
 				D0675D061859803200AE87EF /* monster */,
 				D0675D081859803900AE87EF /* battleback */,
-				D41A0AD0160F154A004552AE /* Default-568h@2x.png */,
+				D0DDFCE5185DC5A500712A57 /* effects */,
 				D446FD6D16102124000ADA7B /* Default@2x.png */,
+				D41A0AD0160F154A004552AE /* Default-568h@2x.png */,
 				D4EF949B15BD2D8E00D803EB /* Icon-114.png */,
 				7855E0DF153FEF240059DD9A /* Default.png */,
 				D4EF949F15BD2D9800D803EB /* Icon-144.png */,
@@ -1775,6 +1779,7 @@
 			children = (
 				D0675D0318597C1D00AE87EF /* BattleScene.cpp */,
 				D0675D0418597C1D00AE87EF /* BattleScene.h */,
+				D0DDFCE7185DC63700712A57 /* characterStatus.h */,
 			);
 			name = BattleScene;
 			sourceTree = "<group>";
@@ -1863,6 +1868,7 @@
 				D0675D091859803900AE87EF /* battleback in Resources */,
 				379BB9D017F03F3700829B88 /* json_valueiterator.inl in Resources */,
 				379BB9D217F03F3700829B88 /* sconscript in Resources */,
+				D0DDFCE6185DC5A500712A57 /* effects in Resources */,
 				D06F7D7018517C6A0020DBF4 /* charachip in Resources */,
 				D0675D071859803200AE87EF /* monster in Resources */,
 			);
