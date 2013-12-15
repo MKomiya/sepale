@@ -27,6 +27,9 @@ bool BattleScene::init()
         return false;
     }
     
+    // 情報の読み込み
+    _loadEnemyStatus();
+    
     const CCSize s = CCDirector::sharedDirector()->getWinSize();
     
     // 戦闘背景
@@ -123,6 +126,7 @@ bool BattleScene::init()
     label->setAnchorPoint(ccp(0.5, 1));
     label->setPosition(message_view->getPosition());
     label->setPositionY(label->getPositionY() - 6);
+    label->setTag(kMessageViewLabelTags);
     this->addChild(label);
     
     return true;
@@ -130,12 +134,20 @@ bool BattleScene::init()
 
 void BattleScene::attackCommand()
 {
-    // とりあえずエフェクトが再生されるだけです
+    // ダメージ計算処理
+    int damage = _damageCalc(&_player, &_enemy);
+    _enemy.status.life -= damage;
+    
+    // 相手を点滅させる
+    auto enemy_sprite = (CCSprite*)this->getChildByTag(kEnemySpriteTags);
+    auto blink = CCBlink::create(0.3f, 5);
+    enemy_sprite->runAction(blink);
+    
     // 斬撃エフェクト
     auto texture = CCTextureCache::sharedTextureCache()->addImage("effects/effect.png");
     texture->setAliasTexParameters();
     auto sprite = CCSprite::createWithTexture(texture);
-    auto enemy_pos = this->getChildByTag(kEnemySpriteTags)->getPosition();
+    auto enemy_pos = enemy_sprite->getPosition();
     sprite->setPosition(enemy_pos);
     sprite->setTag(kEffectAnimationTags);
     sprite->setScale(0.5f);
@@ -153,11 +165,24 @@ void BattleScene::attackCommand()
     
     sprite->runAction(action_list);
     this->addChild(sprite);
+    
+    auto label = (CCLabelTTF*)this->getChildByTag(kMessageViewLabelTags);
+    label->setString("ひかりのつるぎ");
+    
+    // ダメージ描画
+    auto damage_label = CCLabelTTF::create("", "Arial", 32);
+    this->addChild(damage_label);
+    damage_label->setString(CCString::createWithFormat("%d", damage)->getCString());
+    damage_label->setScale(0.5f);
+    damage_label->setPosition(enemy_pos);
+    damage_label->setColor(ccc3(255, 64, 64));
+    auto mover = CCMoveBy::create(0.3f, ccp(3.f, 16.f));
+    auto remove = CCRemoveSelf::create();
+    damage_label->runAction(CCSequence::create(mover, remove, NULL));
 }
 
 void BattleScene::skillCommand()
 {
-    
 }
 
 void BattleScene::itemCommand()
@@ -167,7 +192,7 @@ void BattleScene::itemCommand()
 
 void BattleScene::runawayCommand()
 {
-    
+    CCLOG("逃げ出した");
 }
 
 void BattleScene::enemyAttack()
@@ -203,6 +228,7 @@ void BattleScene::_selectedAttackCommand()
 
 void BattleScene::_selectedSkillCommand()
 {
+    
 }
 
 void BattleScene::_selectedItemCommand()
@@ -211,6 +237,12 @@ void BattleScene::_selectedItemCommand()
 
 void BattleScene::_selectedRunawayCommand()
 {
+    auto action = CCCallFunc::create(this, callfunc_selector(BattleScene::runawayCommand));
+    _player.action = action;
+    action->retain();
+    
+    _toggleCommandMenu();
+    _enemyCommandSelect();
 }
 
 void BattleScene::_enemyCommandSelect()

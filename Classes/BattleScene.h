@@ -19,7 +19,8 @@ class BattleScene : public cocos2d::CCLayer
 public:
     enum {
         kEnemySpriteTags,
-        kEffectAnimationTags
+        kEffectAnimationTags,
+        kMessageViewLabelTags,
     };
     
     struct BattleData {
@@ -58,7 +59,10 @@ private:
     // コマンド入力部のtoggle切り替え
     void _toggleCommandMenu();
     
-    cocos2d::CCLayer *_commandLayer, *_progressLayer;
+    cocos2d::CCLayer *_commandLayer; // 攻撃アイテムスキル逃げる
+    cocos2d::CCLayer *_progressLayer;// 行動進行の▼
+    cocos2d::CCLayer *_skillLayer;   // スキル一覧
+    cocos2d::CCLayer *_itemLayer;    // アイテム一覧
     BattleData _player, _enemy;
     cocos2d::CCArray _characters_action;
 };
