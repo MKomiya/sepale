@@ -85,5 +85,18 @@ bool BattleScene::init()
     button4->setBackgroundSpriteForState(pushed, CCControlStateHighlighted);
     this->addChild(button4);
     
+    // 戦闘のメッセージビューの表示
+    auto message_view = CCSprite::create("interfaces/battle_messageview.png");
+    message_view->getTexture()->setAliasTexParameters();
+    message_view->setAnchorPoint(ccp(0.5, 1));
+    message_view->setPosition(ccp(s.width / 2, s.height - 7));
+    this->addChild(message_view);
+    auto label = CCLabelTTF::create("vs グール", "Arial", 16);
+    label->setScale(0.5f);
+    label->setAnchorPoint(ccp(0.5, 1));
+    label->setPosition(message_view->getPosition());
+    label->setPositionY(label->getPositionY() - 6);
+    this->addChild(label);
+    
     return true;
 }
