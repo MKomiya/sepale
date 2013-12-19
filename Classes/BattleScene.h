@@ -21,6 +21,7 @@ public:
         kEnemySpriteTags,
         kEffectAnimationTags,
         kMessageViewLabelTags,
+        kPlayerViewTags
     };
     
     struct BattleData {

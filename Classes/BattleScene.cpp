@@ -129,6 +129,39 @@ bool BattleScene::init()
     label->setTag(kMessageViewLabelTags);
     this->addChild(label);
     
+    // 戦闘のプレイヤービューの表示
+    auto status_view = CCSprite::create("interfaces/battle_statusview.png");
+    status_view->getTexture()->setAliasTexParameters();
+    status_view->setAnchorPoint(ccp(0.5f, 0));
+    status_view->setPosition(ccp(s.width/2, 87));
+    status_view->setTag(kPlayerViewTags);
+    this->addChild(status_view);
+    auto name_label = CCLabelTTF::create("HINOMI", "Arial", 16);
+    status_view->addChild(name_label);
+    name_label->setScale(0.5f);
+    name_label->setAnchorPoint(ccp(0, 0));
+    name_label->setPosition(ccp(4, 22));
+    auto hp_label = CCLabelTTF::create("Life", "Arial", 16);
+    status_view->addChild(hp_label);
+    hp_label->setScale(0.5f);
+    hp_label->setAnchorPoint(ccp(0, 0));
+    hp_label->setPosition(ccp(4, 12));
+    auto sol_label = CCLabelTTF::create("SOL", "Arial", 16);
+    status_view->addChild(sol_label);
+    sol_label->setScale(0.5f);
+    sol_label->setAnchorPoint(ccp(0, 0));
+    sol_label->setPosition(ccp(4, 2));
+    auto hpnum_label = CCLabelTTF::create("100/100", "Arial", 16);
+    status_view->addChild(hpnum_label);
+    hpnum_label->setScale(0.5f);
+    hpnum_label->setAnchorPoint(ccp(0, 0));
+    hpnum_label->setPosition(ccp(28, 12));
+    auto solnum_label = CCLabelTTF::create("30/30", "Arial", 16);
+    status_view->addChild(solnum_label);
+    solnum_label->setScale(0.5f);
+    solnum_label->setAnchorPoint(ccp(0, 0));
+    solnum_label->setPosition(ccp(28, 2));
+    
     return true;
 }
 
@@ -198,6 +231,52 @@ void BattleScene::runawayCommand()
 void BattleScene::enemyAttack()
 {
     CCLOG("enemy attacked");
+    
+    // ダメージ計算処理
+    int damage = _damageCalc(&_enemy, &_player);
+    _player.status.life -= damage;
+    
+    // 相手を点滅させる
+    auto player_view = (CCSprite*)this->getChildByTag(kPlayerViewTags);
+    auto blink = CCBlink::create(0.3f, 5);
+    player_view->runAction(blink);
+    
+    // 斬撃エフェクト
+    auto texture = CCTextureCache::sharedTextureCache()->addImage("effects/effect.png");
+    texture->setAliasTexParameters();
+    auto sprite = CCSprite::createWithTexture(texture);
+    auto player_pos = player_view->getPosition();
+    sprite->setPosition(player_pos);
+    sprite->setTag(kEffectAnimationTags);
+    sprite->setScale(0.5f);
+    
+    auto cache = CCAnimation::create();
+    cache->addSpriteFrameWithTexture(texture, CCRectMake(0, 0, 64, 64));
+    cache->addSpriteFrameWithTexture(texture, CCRectMake(64, 0, 64, 64));
+    cache->addSpriteFrameWithTexture(texture, CCRectMake(128, 0, 64, 64));
+    cache->setDelayPerUnit(0.15f / 3.0f);
+    cache->setRestoreOriginalFrame(false);
+    
+    auto action = CCAnimate::create(cache);
+    auto selfremover = CCRemoveSelf::create();
+    auto action_list = CCSequence::create(action, selfremover, NULL);
+    
+    sprite->runAction(action_list);
+    this->addChild(sprite);
+    
+    auto label = (CCLabelTTF*)this->getChildByTag(kMessageViewLabelTags);
+    label->setString("なぐりかかる");
+    
+    // ダメージ描画
+    auto damage_label = CCLabelTTF::create("", "Arial", 32);
+    this->addChild(damage_label);
+    damage_label->setString(CCString::createWithFormat("%d", damage)->getCString());
+    damage_label->setScale(0.5f);
+    damage_label->setPosition(player_pos);
+    damage_label->setColor(ccc3(255, 64, 64));
+    auto mover = CCMoveBy::create(0.3f, ccp(3.f, 16.f));
+    auto remove = CCRemoveSelf::create();
+    damage_label->runAction(CCSequence::create(mover, remove, NULL));
 }
 
 void BattleScene::_loadEnemyStatus()

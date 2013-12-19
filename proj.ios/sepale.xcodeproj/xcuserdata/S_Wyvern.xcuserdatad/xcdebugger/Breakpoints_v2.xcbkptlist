@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/BattleScene.cpp"
-            timestampString = "408833547.786535"
+            timestampString = "409168199.00042"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "291"
-            endingLineNumber = "291"
+            startingLineNumber = "370"
+            endingLineNumber = "370"
             landmarkName = "BattleScene::_damageCalc(BattleScene::BattleData *from, BattleScene::BattleData *to)"
             landmarkType = "5">
             <Locations>
