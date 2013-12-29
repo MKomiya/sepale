@@ -46,6 +46,16 @@ bool MapScene::init()
     return true;
 }
 
+void MapScene::onEnter()
+{
+    // 戦闘から戻って来たときに毎回呼ばれる
+    CCLayer::onEnter();
+    
+    // ホントはisScheduledでfalse確認してから
+    // でもisScheduledが動かない．なんでだろ
+    this->schedule(schedule_selector(MapScene::schedulePlayerMover));
+}
+
 void MapScene::schedulePlayerMover(float dt)
 {
     // マップを取得し，移動アクションがあるなら処理しない
@@ -91,17 +101,10 @@ void MapScene::schedulePlayerMover(float dt)
     // 移動処理を行う
     _player_pos = next_pos;
     CCMoveBy* move_act = CCMoveBy::create(0.3f, move_pos);
-    move_act->setTag(kMapMoveTags);
-    map->runAction(move_act);
-    
-    // 歩数を増やす
-    ++_walk_count;
-    
-    // エンカウント確認
-    if(_isEncounterEnemy())
-    {
-        _startBattle();
-    }
+    CCCallFunc* f = CCCallFunc::create(this, callfunc_selector(MapScene::_checkEncounter));
+    CCSequence* seq = CCSequence::create(move_act, f, NULL);
+    seq->setTag(kMapMoveTags);
+    map->runAction(seq);
 }
 
 void MapScene::_viewPlayerCharacter()
@@ -294,6 +297,12 @@ void MapScene::_changePlayerAnimation(std::string direction)
     player->runAction(animate);
 }
 
+void MapScene::_stopPlayerAnimation()
+{
+    CCSprite* player = (CCSprite*)this->getChildByTag(kPlayerTags);
+    player->stopActionByTag(kPlayerAnimateTags);
+}
+
 void MapScene::_viewMap()
 {
     const CCSize s = CCDirector::sharedDirector()->getWinSize();
@@ -328,6 +337,34 @@ bool MapScene::_checkCollidable(int gid_x, int gid_y)
     return false;
 }
 
+void MapScene::_checkEncounter()
+{
+    // 歩数を増やす
+    ++_walk_count;
+    
+    // エンカウント確認
+    if(_isEncounterEnemy())
+    {
+        // moverをとめる
+        _mover = kMoveNo;
+        
+        // アニメーションをストップ
+        //_stopPlayerAnimation();
+        this->unschedule(schedule_selector(MapScene::schedulePlayerMover));
+        
+        // エンカウントしたらVirtual padを消してから戦闘画面へ遷移
+        SneakyJoystickSkinnedBase* base = (SneakyJoystickSkinnedBase*)this->getChildByTag(kVirtualPadBaseTags);
+        CCSprite* selected = (CCSprite*)this->getChildByTag(kVirtualPadSelectedTags);
+        base->setVisible(false);
+        selected->setVisible(false);
+        
+        // 歩数リセット
+        _walk_count = 0;
+        
+        _startBattle();
+    }
+}
+
 bool MapScene::_isEncounterEnemy()
 {
     const int p = rand()%20;
@@ -343,6 +380,6 @@ void MapScene::_startBattle()
 {
     // TODO: フェードアウトフェードイン処理
     CCScene* battle_scene = BattleScene::scene();
-    CCTransitionTurnOffTiles* transition = CCTransitionTurnOffTiles::create(0.5f, battle_scene);
+    CCTransitionTurnOffTiles* transition = CCTransitionTurnOffTiles::create(0.8f, battle_scene);
     CCDirector::sharedDirector()->pushScene(transition);
 }

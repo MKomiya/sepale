@@ -36,6 +36,8 @@ public:
     static cocos2d::CCScene* scene();
     CREATE_FUNC(MapScene);
     
+    virtual void onEnter();
+    
     // ccTouchのデリゲート
     virtual bool ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
     virtual void ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
@@ -45,26 +47,28 @@ public:
     void schedulePlayerMover(float dt);
     
 private:
-    // ユーザが移動させるプレイヤーの表示
-    void _viewPlayerCharacter();
-    
     // Virtual Padの初期化
     void _initVirtualPad();
     
+    // ユーザが移動させるプレイヤーの表示
+    void _viewPlayerCharacter();
     // プレイヤのアニメーション変更
     void _changePlayerAnimation(std::string direction);
+    // プレイヤのアニメーションストップ
+    void _stopPlayerAnimation();
     
     // マップの表示
     void _viewMap();
-    
     // マップオブジェクトとの衝突判定
     bool _checkCollidable(int gid_x, int gid_y);
     
+    // 移動後のエンカウントチェック処理
+    void _checkEncounter();
     // エンカウントのチェック
     bool _isEncounterEnemy();
-    
     // 戦闘処理
     void _startBattle();
+    
     
     MoveDirection _mover;               // 移動方向
     cocos2d::CCPoint _player_pos;       // プレイヤーのマップ位置
