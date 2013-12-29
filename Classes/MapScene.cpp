@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include "MapScene.h"
+#include "BattleScene.h"
 
 #include "SneakyJoystickSkinnedBase.h"
 #include "SneakyJoystick.h"
@@ -32,6 +33,7 @@ bool MapScene::init()
     // メンバ変数初期化
     _mover = kMoveNo;
     _player_pos = ccp(4, 6);
+    _walk_count = 0;
     
     // タップの有効化
     this->setTouchEnabled(true);
@@ -91,6 +93,15 @@ void MapScene::schedulePlayerMover(float dt)
     CCMoveBy* move_act = CCMoveBy::create(0.3f, move_pos);
     move_act->setTag(kMapMoveTags);
     map->runAction(move_act);
+    
+    // 歩数を増やす
+    ++_walk_count;
+    
+    // エンカウント確認
+    if(_isEncounterEnemy())
+    {
+        _startBattle();
+    }
 }
 
 void MapScene::_viewPlayerCharacter()
@@ -315,4 +326,22 @@ bool MapScene::_checkCollidable(int gid_x, int gid_y)
         return true;
     }
     return false;
+}
+
+bool MapScene::_isEncounterEnemy()
+{
+    const int p = rand()%20;
+    if(p < _walk_count)
+    {
+        return true; // 歩数/20の確率でエンカウント
+    }
+    
+    return false;
+}
+
+void MapScene::_startBattle()
+{
+    // TODO: フェードアウトフェードイン処理
+    auto battle_scene = BattleScene::scene();
+    CCDirector::sharedDirector()->pushScene(battle_scene);
 }

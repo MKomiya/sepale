@@ -60,8 +60,15 @@ private:
     // マップオブジェクトとの衝突判定
     bool _checkCollidable(int gid_x, int gid_y);
     
-    MoveDirection _mover;
-    cocos2d::CCPoint _player_pos;
+    // エンカウントのチェック
+    bool _isEncounterEnemy();
+    
+    // 戦闘処理
+    void _startBattle();
+    
+    MoveDirection _mover;               // 移動方向
+    cocos2d::CCPoint _player_pos;       // プレイヤーのマップ位置
+    int _walk_count;                    // 戦闘から歩いた歩数
 };
 
 #endif /* defined(__sepale__MapScene__) */
