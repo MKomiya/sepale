@@ -343,5 +343,6 @@ void MapScene::_startBattle()
 {
     // TODO: フェードアウトフェードイン処理
     auto battle_scene = BattleScene::scene();
-    CCDirector::sharedDirector()->pushScene(battle_scene);
+    auto transition = CCTransitionTurnOffTiles::create(0.5f, battle_scene);
+    CCDirector::sharedDirector()->pushScene(transition);
 }
