@@ -33,12 +33,12 @@ bool BattleScene::init()
     const CCSize s = CCDirector::sharedDirector()->getWinSize();
     
     // 戦闘背景
-    auto wallback = CCSprite::create("battleback/cave.png");
+    CCSprite* wallback = CCSprite::create("battleback/cave.png");
     wallback->setPosition(ccp(s.width / 2, s.height / 2 + 40));
     this->addChild(wallback);
     
     // 敵
-    auto enemy = CCSprite::create("monster/ghoul.png");
+    CCSprite* enemy = CCSprite::create("monster/ghoul.png");
     enemy->getTexture()->setAliasTexParameters();
     enemy->setPosition(ccp(2 * s.width / 4, s.height / 2 + 50));
     enemy->setTag(kEnemySpriteTags);
@@ -49,19 +49,19 @@ bool BattleScene::init()
     this->addChild(_commandLayer);
     
     // ボタン
-    auto button1 = CCControlButton::create(CCLabelTTF::create("スキル", "Arial", 16), CCScale9Sprite::create("interfaces/button.png"));
+    CCControlButton* button1 = CCControlButton::create(CCLabelTTF::create("スキル", "Arial", 16), CCScale9Sprite::create("interfaces/button.png"));
     button1->getTitleLabel()->setScale(0.5f);
     button1->setZoomOnTouchDown(false);
     button1->setAnchorPoint(ccp(0, 0));
     button1->setPosition(ccp(16, 10));
     button1->setPreferredSize(CCSizeMake(60, 24));
-    auto pushed = CCScale9Sprite::create("interfaces/button.png");
+    CCScale9Sprite* pushed = CCScale9Sprite::create("interfaces/button.png");
     pushed->setColor(ccc3(50, 80, 125));
     button1->setBackgroundSpriteForState(pushed, CCControlStateHighlighted);
     _commandLayer->addChild(button1);
     button1->addTargetWithActionForControlEvents(this, cccontrol_selector(BattleScene::_selectedSkillCommand), CCControlEventTouchUpInside);
     
-    auto button2 = CCControlButton::create(CCLabelTTF::create("にげる", "Arial", 16), CCScale9Sprite::create("interfaces/button.png"));
+    CCControlButton* button2 = CCControlButton::create(CCLabelTTF::create("にげる", "Arial", 16), CCScale9Sprite::create("interfaces/button.png"));
     button2->getTitleLabel()->setScale(0.5f);
     button2->setZoomOnTouchDown(false);
     button2->setAnchorPoint(ccp(1, 0));
@@ -73,7 +73,7 @@ bool BattleScene::init()
     _commandLayer->addChild(button2);
     button2->addTargetWithActionForControlEvents(this, cccontrol_selector(BattleScene::_selectedRunawayCommand), CCControlEventTouchUpInside);
     
-    auto button3 = CCControlButton::create(CCLabelTTF::create("たたかう", "Arial", 16), CCScale9Sprite::create("interfaces/button.png"));
+    CCControlButton* button3 = CCControlButton::create(CCLabelTTF::create("たたかう", "Arial", 16), CCScale9Sprite::create("interfaces/button.png"));
     button3->getTitleLabel()->setScale(0.5f);
     button3->setZoomOnTouchDown(false);
     button3->setAnchorPoint(ccp(0, 1));
@@ -85,7 +85,7 @@ bool BattleScene::init()
     _commandLayer->addChild(button3);
     button3->addTargetWithActionForControlEvents(this, cccontrol_selector(BattleScene::_selectedAttackCommand), CCControlEventTouchUpInside);
     
-    auto button4 = CCControlButton::create(CCLabelTTF::create("アイテム", "Arial", 16), CCScale9Sprite::create("interfaces/button.png"));
+    CCControlButton* button4 = CCControlButton::create(CCLabelTTF::create("アイテム", "Arial", 16), CCScale9Sprite::create("interfaces/button.png"));
     button4->getTitleLabel()->setScale(0.5f);
     button4->setZoomOnTouchDown(false);
     button4->setAnchorPoint(ccp(1, 1));
@@ -103,7 +103,7 @@ bool BattleScene::init()
     this->addChild(_progressLayer);
     
     // 今ボタンにしてますが今後タップ処理にするかも
-    auto prog_button = CCControlButton::create(CCLabelTTF::create("▼", "Arial", 16), CCScale9Sprite::create("interfaces/button.png"));
+    CCControlButton* prog_button = CCControlButton::create(CCLabelTTF::create("▼", "Arial", 16), CCScale9Sprite::create("interfaces/button.png"));
     prog_button->getTitleLabel()->setScale(0.5f);
     prog_button->setZoomOnTouchDown(false);
     prog_button->setAnchorPoint(ccp(0.5f, 0.5f));
@@ -116,12 +116,12 @@ bool BattleScene::init()
     prog_button->addTargetWithActionForControlEvents(this, cccontrol_selector(BattleScene::_turnProcess), CCControlEventTouchUpInside);
     
     // 戦闘のメッセージビューの表示
-    auto message_view = CCSprite::create("interfaces/battle_messageview.png");
+    CCSprite* message_view = CCSprite::create("interfaces/battle_messageview.png");
     message_view->getTexture()->setAliasTexParameters();
     message_view->setAnchorPoint(ccp(0.5, 1));
     message_view->setPosition(ccp(s.width / 2, s.height - 7));
     this->addChild(message_view);
-    auto label = CCLabelTTF::create("vs グール", "Arial", 16);
+    CCLabelTTF* label = CCLabelTTF::create("vs グール", "Arial", 16);
     label->setScale(0.5f);
     label->setAnchorPoint(ccp(0.5, 1));
     label->setPosition(message_view->getPosition());
@@ -130,33 +130,33 @@ bool BattleScene::init()
     this->addChild(label);
     
     // 戦闘のプレイヤービューの表示
-    auto status_view = CCSprite::create("interfaces/battle_statusview.png");
+    CCSprite* status_view = CCSprite::create("interfaces/battle_statusview.png");
     status_view->getTexture()->setAliasTexParameters();
     status_view->setAnchorPoint(ccp(0.5f, 0));
     status_view->setPosition(ccp(s.width/2, 87));
     status_view->setTag(kPlayerViewTags);
     this->addChild(status_view);
-    auto name_label = CCLabelTTF::create("HINOMI", "Arial", 16);
+    CCLabelTTF* name_label = CCLabelTTF::create("HINOMI", "Arial", 16);
     status_view->addChild(name_label);
     name_label->setScale(0.5f);
     name_label->setAnchorPoint(ccp(0, 0));
     name_label->setPosition(ccp(4, 22));
-    auto hp_label = CCLabelTTF::create("Life", "Arial", 16);
+    CCLabelTTF* hp_label = CCLabelTTF::create("Life", "Arial", 16);
     status_view->addChild(hp_label);
     hp_label->setScale(0.5f);
     hp_label->setAnchorPoint(ccp(0, 0));
     hp_label->setPosition(ccp(4, 12));
-    auto sol_label = CCLabelTTF::create("SOL", "Arial", 16);
+    CCLabelTTF* sol_label = CCLabelTTF::create("SOL", "Arial", 16);
     status_view->addChild(sol_label);
     sol_label->setScale(0.5f);
     sol_label->setAnchorPoint(ccp(0, 0));
     sol_label->setPosition(ccp(4, 2));
-    auto hpnum_label = CCLabelTTF::create("100/100", "Arial", 16);
+    CCLabelTTF* hpnum_label = CCLabelTTF::create("100/100", "Arial", 16);
     status_view->addChild(hpnum_label);
     hpnum_label->setScale(0.5f);
     hpnum_label->setAnchorPoint(ccp(0, 0));
     hpnum_label->setPosition(ccp(28, 12));
-    auto solnum_label = CCLabelTTF::create("30/30", "Arial", 16);
+    CCLabelTTF* solnum_label = CCLabelTTF::create("30/30", "Arial", 16);
     status_view->addChild(solnum_label);
     solnum_label->setScale(0.5f);
     solnum_label->setAnchorPoint(ccp(0, 0));
@@ -172,45 +172,45 @@ void BattleScene::attackCommand()
     _enemy.status.life -= damage;
     
     // 相手を点滅させる
-    auto enemy_sprite = (CCSprite*)this->getChildByTag(kEnemySpriteTags);
-    auto blink = CCBlink::create(0.3f, 5);
+    CCSprite* enemy_sprite = (CCSprite*)this->getChildByTag(kEnemySpriteTags);
+    CCBlink* blink = CCBlink::create(0.3f, 5);
     enemy_sprite->runAction(blink);
     
     // 斬撃エフェクト
-    auto texture = CCTextureCache::sharedTextureCache()->addImage("effects/effect.png");
+    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("effects/effect.png");
     texture->setAliasTexParameters();
-    auto sprite = CCSprite::createWithTexture(texture);
-    auto enemy_pos = enemy_sprite->getPosition();
+    CCSprite* sprite = CCSprite::createWithTexture(texture);
+    CCPoint enemy_pos = enemy_sprite->getPosition();
     sprite->setPosition(enemy_pos);
     sprite->setTag(kEffectAnimationTags);
     sprite->setScale(0.5f);
     
-    auto cache = CCAnimation::create();
+    CCAnimation* cache = CCAnimation::create();
     cache->addSpriteFrameWithTexture(texture, CCRectMake(0, 0, 64, 64));
     cache->addSpriteFrameWithTexture(texture, CCRectMake(64, 0, 64, 64));
     cache->addSpriteFrameWithTexture(texture, CCRectMake(128, 0, 64, 64));
     cache->setDelayPerUnit(0.15f / 3.0f);
     cache->setRestoreOriginalFrame(false);
     
-    auto action = CCAnimate::create(cache);
-    auto selfremover = CCRemoveSelf::create();
-    auto action_list = CCSequence::create(action, selfremover, NULL);
+    CCAnimate* action = CCAnimate::create(cache);
+    CCRemoveSelf* selfremover = CCRemoveSelf::create();
+    CCSequence* action_list = CCSequence::create(action, selfremover, NULL);
     
     sprite->runAction(action_list);
     this->addChild(sprite);
     
-    auto label = (CCLabelTTF*)this->getChildByTag(kMessageViewLabelTags);
+    CCLabelTTF* label = (CCLabelTTF*)this->getChildByTag(kMessageViewLabelTags);
     label->setString("ひかりのつるぎ");
     
     // ダメージ描画
-    auto damage_label = CCLabelTTF::create("", "Arial", 32);
+    CCLabelTTF* damage_label = CCLabelTTF::create("", "Arial", 32);
     this->addChild(damage_label);
     damage_label->setString(CCString::createWithFormat("%d", damage)->getCString());
     damage_label->setScale(0.5f);
     damage_label->setPosition(enemy_pos);
     damage_label->setColor(ccc3(255, 64, 64));
-    auto mover = CCMoveBy::create(0.3f, ccp(3.f, 16.f));
-    auto remove = CCRemoveSelf::create();
+    CCMoveBy* mover = CCMoveBy::create(0.3f, ccp(3.f, 16.f));
+    CCRemoveSelf* remove = CCRemoveSelf::create();
     damage_label->runAction(CCSequence::create(mover, remove, NULL));
 }
 
@@ -237,45 +237,45 @@ void BattleScene::enemyAttack()
     _player.status.life -= damage;
     
     // 相手を点滅させる
-    auto player_view = (CCSprite*)this->getChildByTag(kPlayerViewTags);
-    auto blink = CCBlink::create(0.3f, 5);
+    CCSprite* player_view = (CCSprite*)this->getChildByTag(kPlayerViewTags);
+    CCBlink* blink = CCBlink::create(0.3f, 5);
     player_view->runAction(blink);
     
     // 斬撃エフェクト
-    auto texture = CCTextureCache::sharedTextureCache()->addImage("effects/effect.png");
+    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("effects/effect.png");
     texture->setAliasTexParameters();
-    auto sprite = CCSprite::createWithTexture(texture);
-    auto player_pos = player_view->getPosition();
+    CCSprite* sprite = CCSprite::createWithTexture(texture);
+    CCPoint player_pos = player_view->getPosition();
     sprite->setPosition(player_pos);
     sprite->setTag(kEffectAnimationTags);
     sprite->setScale(0.5f);
     
-    auto cache = CCAnimation::create();
+    CCAnimation* cache = CCAnimation::create();
     cache->addSpriteFrameWithTexture(texture, CCRectMake(0, 0, 64, 64));
     cache->addSpriteFrameWithTexture(texture, CCRectMake(64, 0, 64, 64));
     cache->addSpriteFrameWithTexture(texture, CCRectMake(128, 0, 64, 64));
     cache->setDelayPerUnit(0.15f / 3.0f);
     cache->setRestoreOriginalFrame(false);
     
-    auto action = CCAnimate::create(cache);
-    auto selfremover = CCRemoveSelf::create();
-    auto action_list = CCSequence::create(action, selfremover, NULL);
+    CCAnimate* action = CCAnimate::create(cache);
+    CCRemoveSelf* selfremover = CCRemoveSelf::create();
+    CCSequence* action_list = CCSequence::create(action, selfremover, NULL);
     
     sprite->runAction(action_list);
     this->addChild(sprite);
     
-    auto label = (CCLabelTTF*)this->getChildByTag(kMessageViewLabelTags);
+    CCLabelTTF* label = (CCLabelTTF*)this->getChildByTag(kMessageViewLabelTags);
     label->setString("なぐりかかる");
     
     // ダメージ描画
-    auto damage_label = CCLabelTTF::create("", "Arial", 32);
+    CCLabelTTF* damage_label = CCLabelTTF::create("", "Arial", 32);
     this->addChild(damage_label);
     damage_label->setString(CCString::createWithFormat("%d", damage)->getCString());
     damage_label->setScale(0.5f);
     damage_label->setPosition(player_pos);
     damage_label->setColor(ccc3(255, 64, 64));
-    auto mover = CCMoveBy::create(0.3f, ccp(3.f, 16.f));
-    auto remove = CCRemoveSelf::create();
+    CCMoveBy* mover = CCMoveBy::create(0.3f, ccp(3.f, 16.f));
+    CCRemoveSelf* remove = CCRemoveSelf::create();
     damage_label->runAction(CCSequence::create(mover, remove, NULL));
 }
 
@@ -297,7 +297,7 @@ void BattleScene::_loadEnemyStatus()
 
 void BattleScene::_selectedAttackCommand()
 {
-    auto action = CCCallFunc::create(this, callfunc_selector(BattleScene::attackCommand));
+    CCCallFunc* action = CCCallFunc::create(this, callfunc_selector(BattleScene::attackCommand));
     _player.action = action;
     action->retain();
     
@@ -316,7 +316,7 @@ void BattleScene::_selectedItemCommand()
 
 void BattleScene::_selectedRunawayCommand()
 {
-    auto action = CCCallFunc::create(this, callfunc_selector(BattleScene::runawayCommand));
+    CCCallFunc* action = CCCallFunc::create(this, callfunc_selector(BattleScene::runawayCommand));
     _player.action = action;
     action->retain();
     
@@ -326,7 +326,7 @@ void BattleScene::_selectedRunawayCommand()
 
 void BattleScene::_enemyCommandSelect()
 {
-    auto action = CCCallFunc::create(this, callfunc_selector(BattleScene::enemyAttack));
+    CCCallFunc* action = CCCallFunc::create(this, callfunc_selector(BattleScene::enemyAttack));
     _enemy.action = action;
     action->retain();
 
@@ -351,7 +351,7 @@ void BattleScene::_sortCharacterAction()
 
 void BattleScene::_turnProcess()
 {
-    auto action = (CCCallFunc*)_characters_action.objectAtIndex(0);
+    CCCallFunc* action = (CCCallFunc*)_characters_action.objectAtIndex(0);
     _characters_action.removeObjectAtIndex(0);
     
     this->runAction(action);

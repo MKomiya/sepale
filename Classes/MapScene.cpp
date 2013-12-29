@@ -342,7 +342,7 @@ bool MapScene::_isEncounterEnemy()
 void MapScene::_startBattle()
 {
     // TODO: フェードアウトフェードイン処理
-    auto battle_scene = BattleScene::scene();
-    auto transition = CCTransitionTurnOffTiles::create(0.5f, battle_scene);
+    CCScene* battle_scene = BattleScene::scene();
+    CCTransitionTurnOffTiles* transition = CCTransitionTurnOffTiles::create(0.5f, battle_scene);
     CCDirector::sharedDirector()->pushScene(transition);
 }
