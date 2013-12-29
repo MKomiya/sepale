@@ -8,6 +8,7 @@
 
 #include "cocos-ext.h"
 #include "BattleScene.h"
+#include "MapScene.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -226,6 +227,8 @@ void BattleScene::itemCommand()
 void BattleScene::runawayCommand()
 {
     CCLOG("逃げ出した");
+    
+    CCDirector::sharedDirector()->popScene();
 }
 
 void BattleScene::enemyAttack()
