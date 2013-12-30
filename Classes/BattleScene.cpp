@@ -28,11 +28,12 @@ bool BattleScene::init()
         return false;
     }
     
+    _is_end_battle = false;
+    
     // 情報の読み込み
     _loadEnemyStatus();
     
     const CCSize s = CCDirector::sharedDirector()->getWinSize();
-    
     // 戦闘背景
     CCSprite* wallback = CCSprite::create("battleback/cave.png");
     wallback->setPosition(ccp(s.width / 2, s.height / 2 + 40));
@@ -137,7 +138,7 @@ bool BattleScene::init()
     status_view->setPosition(ccp(s.width/2, 87));
     status_view->setTag(kPlayerViewTags);
     this->addChild(status_view);
-    CCLabelTTF* name_label = CCLabelTTF::create("HINOMI", "Arial", 16);
+    CCLabelTTF* name_label = CCLabelTTF::create("HINO", "Arial", 16);
     status_view->addChild(name_label);
     name_label->setScale(0.5f);
     name_label->setAnchorPoint(ccp(0, 0));
@@ -157,12 +158,22 @@ bool BattleScene::init()
     hpnum_label->setScale(0.5f);
     hpnum_label->setAnchorPoint(ccp(0, 0));
     hpnum_label->setPosition(ccp(28, 12));
+    hpnum_label->setTag(kPlayerHPLabelTags);
     CCLabelTTF* solnum_label = CCLabelTTF::create("30/30", "Arial", 16);
     status_view->addChild(solnum_label);
     solnum_label->setScale(0.5f);
     solnum_label->setAnchorPoint(ccp(0, 0));
     solnum_label->setPosition(ccp(28, 2));
     
+    return true;
+}
+
+bool BattleScene::ccTouchBegan(cocos2d::CCTouch *touch, cocos2d::CCEvent *event)
+{
+    if(_is_end_battle)
+    {
+        CCDirector::sharedDirector()->popScene();
+    }
     return true;
 }
 
@@ -213,6 +224,8 @@ void BattleScene::attackCommand()
     CCMoveBy* mover = CCMoveBy::create(0.3f, ccp(3.f, 16.f));
     CCRemoveSelf* remove = CCRemoveSelf::create();
     damage_label->runAction(CCSequence::create(mover, remove, NULL));
+    
+    _doneAction();
 }
 
 void BattleScene::skillCommand()
@@ -243,34 +256,12 @@ void BattleScene::enemyAttack()
     CCSprite* player_view = (CCSprite*)this->getChildByTag(kPlayerViewTags);
     CCBlink* blink = CCBlink::create(0.3f, 5);
     player_view->runAction(blink);
-    
-    // 斬撃エフェクト
-    CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("effects/effect.png");
-    texture->setAliasTexParameters();
-    CCSprite* sprite = CCSprite::createWithTexture(texture);
-    CCPoint player_pos = player_view->getPosition();
-    sprite->setPosition(player_pos);
-    sprite->setTag(kEffectAnimationTags);
-    sprite->setScale(0.5f);
-    
-    CCAnimation* cache = CCAnimation::create();
-    cache->addSpriteFrameWithTexture(texture, CCRectMake(0, 0, 64, 64));
-    cache->addSpriteFrameWithTexture(texture, CCRectMake(64, 0, 64, 64));
-    cache->addSpriteFrameWithTexture(texture, CCRectMake(128, 0, 64, 64));
-    cache->setDelayPerUnit(0.15f / 3.0f);
-    cache->setRestoreOriginalFrame(false);
-    
-    CCAnimate* action = CCAnimate::create(cache);
-    CCRemoveSelf* selfremover = CCRemoveSelf::create();
-    CCSequence* action_list = CCSequence::create(action, selfremover, NULL);
-    
-    sprite->runAction(action_list);
-    this->addChild(sprite);
-    
+
     CCLabelTTF* label = (CCLabelTTF*)this->getChildByTag(kMessageViewLabelTags);
     label->setString("なぐりかかる");
     
     // ダメージ描画
+    const CCPoint player_pos = player_view->getPosition();
     CCLabelTTF* damage_label = CCLabelTTF::create("", "Arial", 32);
     this->addChild(damage_label);
     damage_label->setString(CCString::createWithFormat("%d", damage)->getCString());
@@ -280,6 +271,8 @@ void BattleScene::enemyAttack()
     CCMoveBy* mover = CCMoveBy::create(0.3f, ccp(3.f, 16.f));
     CCRemoveSelf* remove = CCRemoveSelf::create();
     damage_label->runAction(CCSequence::create(mover, remove, NULL));
+
+    _doneAction();
 }
 
 void BattleScene::_loadEnemyStatus()
@@ -289,13 +282,17 @@ void BattleScene::_loadEnemyStatus()
     CharacterStatus enemy_status;
     enemy_status.life     = 50;
     enemy_status.max_life = enemy_status.life;
-    enemy_status.attack   = 20;
+    enemy_status.attack   = 5;
     enemy_status.defence  = 0;
     enemy_status.speed    = 10;
-    
     _enemy.status = enemy_status;
-    _player.status = enemy_status;
-    _player.status.speed = 15;
+    
+    // プレイヤーの情報（まだきめうち）
+    _player.status.life     = 100;
+    _player.status.max_life = _player.status.life;
+    _player.status.attack   = 20;
+    _player.status.defence  = 0;
+    _player.status.speed    = 15;
 }
 
 void BattleScene::_selectedAttackCommand()
@@ -386,4 +383,70 @@ void BattleScene::_toggleCommandMenu()
     
     _commandLayer->setVisible(true);
     _progressLayer->setVisible(false);
+}
+
+void BattleScene::_doneAction()
+{
+    _updatePlayerStatusView();
+    _checkDead();
+}
+
+void BattleScene::_updatePlayerStatusView()
+{
+    // とりあえずHPだけの更新です
+    CCSprite* view = (CCSprite*)this->getChildByTag(kPlayerViewTags);
+    CCLabelTTF* label = (CCLabelTTF*)view->getChildByTag(kPlayerHPLabelTags);
+    
+    const CCString* hp = CCString::createWithFormat("%d/%d", _player.status.life, _player.status.max_life);
+    label->setString(hp->getCString());
+}
+
+void BattleScene::_checkDead()
+{
+    // プレイヤーの死亡確認
+    if(_player.status.life <= 0)
+    {
+        // 死亡エフェクト再生・ゲームオーバー処理
+        return ;
+    }
+    
+    // 敵の死亡確認
+    if(_enemy.status.life <= 0)
+    {
+        _characters_action.removeAllObjects();
+        
+        // 死亡エフェクト再生・リザルト処理を割り込みさせる
+        CCCallFunc* func = CCCallFunc::create(this, callfunc_selector(BattleScene::_funcDeadProgress));
+        func->retain();
+        _characters_action.insertObject(func, 0);
+        return ;
+    }
+}
+
+void BattleScene::_funcDeadProgress()
+{
+    _playDeadEffect();
+    _viewResult();
+}
+
+void BattleScene::_playDeadEffect()
+{
+    CCSprite* enemy = (CCSprite*)this->getChildByTag(kEnemySpriteTags);
+    CCFadeOut* fo = CCFadeOut::create(0.5f);
+    CCRemoveSelf* remover = CCRemoveSelf::create();
+    enemy->runAction(CCSequence::create(fo, remover, NULL));
+}
+
+void BattleScene::_viewResult()
+{
+    // リザルトの表示を行い，タップされたらシーン遷移するようにする
+    CCLabelTTF* label = (CCLabelTTF*)this->getChildByTag(kMessageViewLabelTags);
+    label->setString("EXP 5");
+    
+    // 戦闘終了フラグを建てる
+    _is_end_battle = true;
+    
+    // タップで終われるようにタップ有効化する
+    this->setTouchEnabled(true);
+    this->setTouchMode(kCCTouchesOneByOne);
 }

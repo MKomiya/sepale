@@ -21,7 +21,9 @@ public:
         kEnemySpriteTags,
         kEffectAnimationTags,
         kMessageViewLabelTags,
-        kPlayerViewTags
+        kPlayerViewTags,
+        kPlayerHPLabelTags,
+        kPlayerSOLLabelTags
     };
     
     struct BattleData {
@@ -42,6 +44,9 @@ public:
     // 敵の行動
     void enemyAttack();
     
+    // シーン遷移用のタッチ取得
+    virtual bool ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
+    
 private:
     // 【戦闘開始時】敵データ読み込み処理
     void _loadEnemyStatus();
@@ -60,12 +65,27 @@ private:
     // コマンド入力部のtoggle切り替え
     void _toggleCommandMenu();
     
+    // アクション後の後始末処理
+    void _doneAction();
+    // プレイヤーの表示部の更新
+    void _updatePlayerStatusView();
+    // 死亡判定
+    void _checkDead();
+    // 死亡時の処理
+    void _funcDeadProgress();
+    // 死亡エフェクトの再生
+    void _playDeadEffect();
+    // リザルトの表示
+    void _viewResult();
+    
     cocos2d::CCLayer *_commandLayer; // 攻撃アイテムスキル逃げる
     cocos2d::CCLayer *_progressLayer;// 行動進行の▼
     cocos2d::CCLayer *_skillLayer;   // スキル一覧
     cocos2d::CCLayer *_itemLayer;    // アイテム一覧
     BattleData _player, _enemy;
     cocos2d::CCArray _characters_action;
+    
+    bool _is_end_battle;    // 戦闘が終わったかどうか
 };
 
 #endif /* defined(__sepale__BattleScene__) */
